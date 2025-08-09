@@ -13,16 +13,19 @@ class loginAdmin extends Controller
 {
     public function login(Request $request)
     {
-            // 1. تجلب توكن الجلسة من هيدر الطلب
-    $sessionToken = $request->header('Session-Token');
+        // 1. تجلب توكن الجلسة من هيدر الطلب
+        $sessionToken = $request->header('Session-Token');
 
-    // 2. تستدعي دالة checkRole لتتحقق من الجلسة والدور
-    $role = checkRole($sessionToken);
+        // 2. تستدعي دالة checkRole لتتحقق من الجلسة والدور
+        $role = checkRole($sessionToken,"Admin");
 
-    // 3. إذا الجلسة غير صالحة ترجع رسالة خطأ 401
-    if ($role === 'plz login to continue') {
-        return response()->json(['message' => $role], 401);
-    }
+        // 3. إذا الجلسة غير صالحة ترجع رسالة خطأ 401
+        if ($role === 'plz login to continue') {
+            return response()->json(['message' => $role], 401);
+        }
+
+
+
         // التحقق من المدخلات
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',

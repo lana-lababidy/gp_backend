@@ -8,7 +8,8 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
-{    public function run(): void
+{
+    public function run(): void
     { // إنشاء admin
         User::create([
             'username' => 'محمد',
@@ -16,37 +17,41 @@ class UserSeeder extends Seeder
             'password' => '123456',
             'user_session' => null, // لا يتم ملؤها
             'fcm_token' => null, // لا يتم ملؤها
-    
+            'role_id' => 1,
+
         ]);
 
         // إنشاء زبون
         User::create([
-                'username' => 'محمود',
+            'username' => 'محمود',
             'aliasname' => 'الوحش',
             'password' => '654321',
             'user_session' => null, // لا يتم ملؤها
             'fcm_token' => null, // لا يتم ملؤها
-    
+            'role_id' => 2,
+
         ]);
 
         // إنشاء زبون
         User::create([
-                  'username' => 'لانا',
+            'username' => 'لانا',
             'aliasname' => 'البطلة',
             'password' => '231020',
             'user_session' => null, // لا يتم ملؤها
             'fcm_token' => null, // لا يتم ملؤها
-    
+            'role_id' => 2,
+
         ]);
 
         // إنشاء زبون
         User::create([
-      'username' => 'عمر',
+            'username' => 'عمر',
             'aliasname' => 'المتبرع الفهيم',
             'password' => '456789',
             'user_session' => null, // لا يتم ملؤها
             'fcm_token' => null, // لا يتم ملؤها
-    
+            'role_id' => 2,
+
         ]);
     }
 }

@@ -24,7 +24,8 @@ return new class extends Migration
             // $table->unsignedBigInteger('wallet_id')->nullable();
             // $table->foreign('wallet_id')->references('id')->on('wallets')->onDelete('set null');
             // $table->unsignedBigInteger('role_id');
-
+            $table->unsignedBigInteger('role_id');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
         });
     }
 
