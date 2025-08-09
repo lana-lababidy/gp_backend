@@ -18,6 +18,7 @@ class UserSeeder extends Seeder
             'user_session' => null, // لا يتم ملؤها
             'fcm_token' => null, // لا يتم ملؤها
             'role_id' => 1,
+            'mobile_number' => '0934271139',
 
         ]);
 
@@ -28,6 +29,7 @@ class UserSeeder extends Seeder
             'password' => '654321',
             'user_session' => null, // لا يتم ملؤها
             'fcm_token' => null, // لا يتم ملؤها
+            'mobile_number' => '0947214749',
             'role_id' => 2,
 
         ]);
@@ -40,6 +42,7 @@ class UserSeeder extends Seeder
             'user_session' => null, // لا يتم ملؤها
             'fcm_token' => null, // لا يتم ملؤها
             'role_id' => 2,
+            'mobile_number' => '0968879073',
 
         ]);
 
@@ -51,6 +54,7 @@ class UserSeeder extends Seeder
             'user_session' => null, // لا يتم ملؤها
             'fcm_token' => null, // لا يتم ملؤها
             'role_id' => 2,
+            'mobile_number' => '0956976021',
 
         ]);
     }

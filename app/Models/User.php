@@ -27,7 +27,8 @@ class User extends Authenticatable
         'aliasname',
         'wallet_id',
         'user_session',
-        'fcm_token'
+        'fcm_token',
+        'mobile_number'
     ];
 
     // علاقة One to One مع Wallet

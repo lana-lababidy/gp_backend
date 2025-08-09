@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('fcm_token')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->string('mobile_number')->unique();
 
             // $table->unsignedBigInteger('wallet_id')->nullable();
             // $table->foreign('wallet_id')->references('id')->on('wallets')->onDelete('set null');
