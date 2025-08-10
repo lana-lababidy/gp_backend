@@ -37,6 +37,7 @@ class DatabaseSeeder extends Seeder
             WalletSeeder::class,
             UserRoleSeeder::class,
             OtpSeeder::class,
+TestDataSeeder::class,
 
         ]);
     }

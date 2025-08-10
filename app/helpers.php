@@ -26,4 +26,7 @@ if (! function_exists('checkRole')) {
 
         return $role->name;
     }
+
+
+    
 }
