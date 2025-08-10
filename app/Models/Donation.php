@@ -6,14 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Donation extends Model
 {
-        protected $table = 'Donation';
+    protected $table = 'Donations';
 
-    
+
     protected $fillable = [
-        'user_id',
-        'case_id',
+        'quantity',
         'donation_type_id',
         'status_id',
+        'user_id',
+        'case_id',
     ];
 
     public function user()
@@ -35,9 +36,8 @@ class Donation extends Model
     {
         return $this->belongsTo(DonationStatus::class);
     }
-        public function gallery()
+    public function gallery()
     {
         return $this->hasMany(Gallery::class, 'donation_id');
     }
-
 }

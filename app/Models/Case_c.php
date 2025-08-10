@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Case_c extends Model
 {
 
-    protected $table = 'case_c';
+    protected $table = 'case_cs';
 
     public function state()
     {

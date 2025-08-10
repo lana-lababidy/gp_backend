@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\CaseController;
 use App\Http\Controllers\ContinueWithEmail;
+use App\Http\Controllers\DonationController;
 use App\Http\Controllers\generateOtp;
 use App\Http\Controllers\loginAdmin;
 use App\Http\Controllers\loginClient;
@@ -24,6 +25,10 @@ Route::post('/login-admin', [loginAdmin::class, 'login']);
 
 
 Route::get('/cases', [CaseController::class, 'index']);
+
+
+Route::post('/donations', [DonationController::class, 'createDonation']); // للمستخدمين
+Route::patch('/donations/{id}/status', [DonationController::class, 'updateDonationStatus']); // للأدمن
 
 
 //شغالين    flutter

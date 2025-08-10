@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class RequestCaseStatus extends Model
 {
-    protected $table = 'request_case_status';
+    protected $table = 'request_case_statuses';
 
     protected $fillable = ['name', 'code'];
 

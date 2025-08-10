@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DonationStatus extends Model
 {
-    protected $table = 'donation_status';
+    protected $table = 'donation_statuses';
 
     protected $fillable = ['name', 'code'];
 

@@ -10,24 +10,19 @@ class CaseController extends Controller
 {
     public function index()
     {
+        // الأكواد التي تمثل التبرعات المقبولة
+        $acceptedDonationStatusCodes = [2, 3]; // Accepted, Completed
 
-        
-        // حالات مقبولة حسب Seeder
-        $acceptedCaseStatesCodes = [4, 5]; // Success و In Progress
-        $acceptedDonationStatusCodes = [2, 3]; // Accepted و Completed
-
+        // جلب الحالات مع التبرعات وحالة التبرع وحالة الحالة
         $cases = Case_c::with(['state', 'donations.status'])
-            ->whereIn('states_id', $acceptedCaseStatesCodes)
             ->get();
 
         $result = [];
 
         foreach ($cases as $case) {
-            // تحقق إن العلاقة موجودة لتجنب الخطأ NullPointer
+            // حساب كمية التبرعات المقبولة فقط
             $fulfilledQuantity = $case->donations
-                ->filter(function ($donation) use ($acceptedDonationStatusCodes) {
-                    return $donation->status && in_array($donation->status->code, $acceptedDonationStatusCodes);
-                })
+                ->filter(fn($donation) => $donation->status && in_array($donation->status->code, $acceptedDonationStatusCodes))
                 ->sum('quantity');
 
             $goalAmount = $case->goal_amount;
