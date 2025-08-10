@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('RealName');
             $table->date('birthdate');
             $table->string('email')->unique();
-            $table->string('gender');
+        $table->enum('gender', ['male', 'female']);
 
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();

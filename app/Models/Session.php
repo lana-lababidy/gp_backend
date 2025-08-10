@@ -6,10 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Session extends Model
 {
-    protected $table = 'session';
+protected $table = 'sessions';
 
+    // public function user()
+    // {
+    //     return $this->belongsTo(User::class);
+    // }
     public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+{
+    return $this->belongsTo(User::class, 'user_id');
+}
+
 }
