@@ -13,6 +13,7 @@ class Otp extends Model
         'email',
         'otp',
         'expires_at',
+        'mobile_number',
         'is_used'
     ];
 }

@@ -10,11 +10,11 @@ class OtpSeeder extends Seeder
 {
     public function run(): void
     {
-        Otp::create([
-            'email' => 'lana@example.com',
-            'otp' => '1234',
-            'is_used' => false,
-            'expires_at' => Carbon::now()->addMinutes(10),
-        ]);
+        // Otp::create([
+        //     'email' => 'lana@example.com',
+        //     'otp' => '1234',
+        //     'is_used' => false,
+        //     'expires_at' => Carbon::now()->addMinutes(10),
+        // ]);
     }
 }
