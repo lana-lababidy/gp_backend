@@ -13,14 +13,20 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('password');
+            
+            // الهوية
             $table->string('username')->unique();
             $table->string('aliasname')->nullable();
+            $table->string('mobile_number')->unique();
+
+            // الحماية
+            $table->string('password');
             $table->string('user_session')->nullable();
             $table->string('fcm_token')->nullable();
             $table->rememberToken();
             $table->timestamps();
-            $table->string('mobile_number')->unique();
+
+            // العلاقات
 
             // $table->unsignedBigInteger('wallet_id')->nullable();
             // $table->foreign('wallet_id')->references('id')->on('wallets')->onDelete('set null');

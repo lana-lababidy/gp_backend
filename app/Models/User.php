@@ -22,13 +22,14 @@ class User extends Authenticatable
 
     protected $fillable = [
         'role_id',
-        'password',
         'username',
         'aliasname',
-        'wallet_id',
+        'mobile_number',
+        'password',
         'user_session',
         'fcm_token',
-        'mobile_number'
+        // 'wallet_id',
+    
     ];
 
     // علاقة One to One مع Wallet

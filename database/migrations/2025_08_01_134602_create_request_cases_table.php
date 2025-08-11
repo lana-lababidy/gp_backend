@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('email');
             $table->bigInteger('mobile_number');
             $table->integer('importance');
+            $table->integer('goal_quantity');
+            $table->integer('fulfilled_quantity')->default(0);
 
             $table->foreignId('status_id')->constrained('request_case_statuses')->onDelete('cascade');
             $table->foreignId('case_c_id')->constrained('case_cs')->onDelete('cascade');
