@@ -1,48 +1,58 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Case_c;
-use App\Models\CaseC;
+use Illuminate\Http\Request;
 
 class CaseController extends Controller
-{
-    public function index()
+{ public function index()
     {
-        // الأكواد التي تمثل التبرعات المقبولة
-        $acceptedDonationStatusCodes = [2, 3]; // Accepted, Completed
-
-        // جلب الحالات مع التبرعات وحالة التبرع وحالة الحالة
-        $cases = Case_c::with(['state', 'donations.status'])
-            ->get();
-
-        $result = [];
-
-        foreach ($cases as $case) {
-            // حساب كمية التبرعات المقبولة فقط
-            $fulfilledQuantity = $case->donations
-                ->filter(fn($donation) => $donation->status && in_array($donation->status->code, $acceptedDonationStatusCodes))
-                ->sum('quantity');
-
-            $goalAmount = $case->goal_amount;
-
-            $progress = $goalAmount > 0 ? round(($fulfilledQuantity / $goalAmount) * 100, 2) : 0;
-
-            $result[] = [
-                'id' => $case->id,
-                'title' => $case->title,
-                'description' => $case->description,
-                'goal_amount' => $goalAmount,
-                'fulfilled_amount' => $fulfilledQuantity,
-                'progress_percentage' => $progress,
-                'state' => $case->state ? $case->state->name : null,
-            ];
-        }
+        // تحميل الحالات مع بيانات الحالة، نوع التبرع، والمستخدم
+        $cases = Case_C::with(['state', 'donationType', 'user'])->get();
 
         return response()->json([
-            'success' => true,
-            'data' => $result,
+            'status' => 'success',
+            'data' => $cases
         ]);
     }
+
+public function show($id)
+{
+    
+    $case = Case_c::find($id);
+
+    if (!$case) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Case not found'
+        ], 404);
+    }
+
+    return response()->json([
+        'status' => 'success',
+        'data' => $case
+    ]);
+}
+
+
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'required|string',
+        'goal_amount' => 'required|numeric',
+        'states_id' => 'required|exists:case_states,id',
+        'donation_type_id' => 'required|exists:donation_types,id',
+        'user_id' => 'required|exists:users,id',
+    ]);
+
+    $case = Case_c::create($validated);
+
+    return response()->json([
+        'status' => 'success',
+        'data' => $case
+    ], 201);
+}
+
 }

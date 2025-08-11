@@ -8,6 +8,7 @@ class Case_c extends Model
 {
 
     protected $table = 'case_cs';
+    protected $fillable = ['title', 'description', 'goal_amount', 'states_id', 'donation_type_id', 'user_id'];
 
     public function state()
     {
@@ -16,12 +17,16 @@ class Case_c extends Model
 
     public function donationType()
     {
-        return $this->belongsTo(DonationType::class, 'donationType_id');
+        return $this->belongsTo(DonationType::class, 'donation_type_id');
+
+        // return $this->belongsTo(DonationType::class, 'donationType_id');
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
+
+        // return $this->belongsTo(User::class);
     }
 
     public function gallery()

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RequestCaseStatus extends Model
+class RequestChargeState extends Model
 {
     protected $table = 'request_charge_states';
 
