@@ -38,7 +38,7 @@ class RequestCaseController extends Controller
     // POST /api/request-cases
     public function store(Request $request)
     {
-        
+
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'description' => 'required|string',
@@ -57,4 +57,26 @@ class RequestCaseController extends Controller
             'data' => $newRequestCase,
         ], 201);
     }
+      // GET /api/request-cases/{id}
+   public function progress($id)
+{
+    $requestCase = RequestCase::findOrFail($id);
+
+    if ($requestCase->goal_quantity <= 0) {
+        return response()->json([
+            'message' => 'لم يتم تحديد كمية الهدف لهذا الطلب.',
+            'progress' => 0
+        ], 400);
+    }
+
+    $progress = ($requestCase->fulfilled_quantity / $requestCase->goal_quantity) * 100;
+
+    return response()->json([
+        'id'                => $requestCase->id,
+        'description'       => $requestCase->description,
+        'goal_quantity'     => $requestCase->goal_quantity,
+        'fulfilled_quantity'=> $requestCase->fulfilled_quantity,
+        'progress'          => round($progress, 2) . '%'
+    ]);
+}
 }
