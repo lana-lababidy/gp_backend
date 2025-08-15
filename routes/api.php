@@ -30,8 +30,6 @@ Route::post('/continue-with-email', [ContinueWithEmail::class, 'ContinueWithEmai
 // Route::middleware('auth:sanctum')->post('/update-secret-info', [UpdateSecretInfo::class, 'update']);
 Route::post('/login-admin', [loginAdmin::class, 'login']);
 
-Route::post('/donations', [DonationController::class, 'createDonation']); // للمستخدمين'
-
 Route::patch('/donations/{id}/status', [DonationController::class, 'updateDonationStatus']); // للأدمن
 
 
@@ -90,3 +88,14 @@ Route::post('/request-cases', [RequestCaseController::class, 'store']);
  
  //عرض نسبة التقدم
 Route::get('progress/{id}', [RequestCaseController::class, 'progress']);
+
+
+/*Donation*/
+//إضافة تبرع جديد (Donation) في
+
+Route::post('/donations', [DonationController::class, 'store']); // للمستخدمين'
+
+//بتعرض كل التبرعات 
+Route::get('/donations', [DonationController::class, 'index']);
+// بتعرض تبرع خاص بحالة 
+Route::get('/requests/{id}/donations', [DonationController::class, 'donationsByRequest']);

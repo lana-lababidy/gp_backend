@@ -2,42 +2,64 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Donation;
 use Illuminate\Http\Request;
+use App\Models\Donation;
 
 class DonationController extends Controller
 {
-    public function createDonation(Request $request)
+    public function store(Request $request)
     {
+        // التحقق من البيانات
         $validated = $request->validate([
-            'quantity' => 'required|integer|min:1',
+            'quantity'         => 'required|integer|min:1',
             'donation_type_id' => 'required|exists:donation_types,id',
-            'user_id' => 'required|exists:users,id',
-            'case_c_id' => 'required|exists:case_cs,id',
+            'status_id'        => 'required|exists:donation_statuses,id',
+            'user_id'          => 'required|exists:users,id',
+            'case_c_id'        => 'nullable|exists:case_cs,id', // صار Nullable
         ]);
-        $validated['status_id'] = 1; // حالة Pending دائماً
 
-        $donation = Donation::create($validated);
+        // إنشاء التبرع
+        $donation = Donation::create([
+            'quantity'         => $validated['quantity'],
+            'donation_type_id' => $validated['donation_type_id'],
+            'status_id'        => $validated['status_id'],
+            'user_id'          => $validated['user_id'],
+            'case_c_id'        => $validated['case_c_id'] ?? null, // إذا ما انبعت، يظل null
+        ]);
 
         return response()->json([
-            'success' => true,
-            'donation' => $donation,
+            'message' => 'تم تسجيل الدعم بنجاح',
+            'data'    => $donation
         ], 201);
     }
-    public function updateDonationStatus(Request $request, $id)
+    // عرض قائمة كل التبرعات (GET /api/donations)
+    public function index()
     {
-        $donation = Donation::findOrFail($id);
-
-        $validated = $request->validate([
-            'status_id' => 'required|exists:donation_statuses,id',
-        ]);
-
-        $donation->status_id = $validated['status_id'];
-        $donation->save();
+        // تجيب كل التبرعات مع البيانات المرتبطة (مثلاً النوع، الحالة، المستخدم، الحالة المرتبطة)
+        $donations = Donation::with(['donationType', 'status', 'user', 'case'])->get();
 
         return response()->json([
-            'success' => true,
-            'donation' => $donation,
+            'message' => 'قائمة التبرعات',
+            'data' => $donations
+        ]);
+    }
+    // عرض التبرعات الخاصة بطلب معين (GET /api/requests/{id}/donations)
+    public function donationsByRequest($id)
+    {
+        // نتأكد الطلب موجود
+        $request = \App\Models\RequestCase::find($id);
+        if (!$request) {
+            return response()->json([
+                'message' => 'الطلب غير موجود'
+            ], 404);
+        }
+
+        // نجيب التبرعات المرتبطة بالطلب (حسب case_c_id أو حسب العلاقة)
+        $donations = Donation::where('case_c_id', $id)->with(['donationType', 'status', 'user'])->get();
+
+        return response()->json([
+            'message' => "التبرعات الخاصة بالطلب رقم {$id}",
+            'data' => $donations
         ]);
     }
 }

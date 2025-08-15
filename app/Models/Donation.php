@@ -14,7 +14,7 @@ class Donation extends Model
         'donation_type_id',
         'status_id',
         'user_id',
-        'case_id',
+        'case_c_id',
     ];
 
     public function user()
@@ -24,7 +24,7 @@ class Donation extends Model
 
     public function case()
     {
-        return $this->belongsTo(Case_c::class, 'case_id'); // غيّر الاسم إذا كان مختلف
+        return $this->belongsTo(Case_c::class, 'case_c_id'); // غيّر الاسم إذا كان مختلف
     }
 
     public function donationType()
