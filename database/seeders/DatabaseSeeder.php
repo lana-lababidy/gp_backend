@@ -38,6 +38,8 @@ class DatabaseSeeder extends Seeder
             UserRoleSeeder::class,
             OtpSeeder::class,
 TestDataSeeder::class,
+RankSeeder::class,
+
 
         ]);
     }

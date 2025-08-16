@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Donation extends Model
 {
-    protected $table = 'Donations';
+    protected $table = 'donations';
 
 
     protected $fillable = [
@@ -15,6 +15,8 @@ class Donation extends Model
         'status_id',
         'user_id',
         'case_c_id',
+        'points',
+        
     ];
 
     public function user()

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CaseController;
 use App\Http\Controllers\CaseGalleryController;
+use App\Http\Controllers\DonorRankingController;
 use App\Http\Controllers\RequestCaseController;
 use App\Http\Controllers\RequestCaseGalleryController;
 
@@ -99,3 +100,6 @@ Route::post('/donations', [DonationController::class, 'store']); // للمستخ
 Route::get('/donations', [DonationController::class, 'index']);
 // بتعرض تبرع خاص بحالة 
 Route::get('/requests/{id}/donations', [DonationController::class, 'donationsByRequest']);
+
+//قائمة ترتيب للمتبرعين حسب نقاطهم،
+Route::get('/donors/ranking', [DonorRankingController::class, 'index']);

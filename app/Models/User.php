@@ -29,7 +29,7 @@ class User extends Authenticatable
         'user_session',
         'fcm_token',
         // 'wallet_id',
-    
+
     ];
 
     // علاقة One to One مع Wallet
@@ -93,5 +93,9 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class, 'role_id');
+    }
+    public function rank()
+    {
+        return $this->hasOne(Rank::class);
     }
 }
