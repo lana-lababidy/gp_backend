@@ -68,8 +68,8 @@ PATCH:
 يُستخدم لتحديث جزء من السجل فقط، يعني تبعت فقط الحقول اللي بدك تعدلها.
  */
 
-/* second module cases*/
 
+/*  cases*/
 //عرض كل الحالات مع تفاصيلها 
 Route::get('/cases', [CaseController::class, 'index']);
 
@@ -79,7 +79,7 @@ Route::get('/cases/{id}', [CaseController::class, 'show']);
 //إنشاء حالة جديدة
 Route::post('/cases', [CaseController::class, 'store']);
 
-/* second module request-cases*/
+/*  request-cases*/
 //عرض كل طلبات الحالات (يشمل حالة الطلب، وصف، رقم الهاتف...)
 Route::get('/request-cases', [RequestCaseController::class, 'index']);
 //عرض طلب حالة معين
@@ -101,5 +101,7 @@ Route::get('/donations', [DonationController::class, 'index']);
 // بتعرض تبرع خاص بحالة 
 Route::get('/requests/{id}/donations', [DonationController::class, 'donationsByRequest']);
 
+
+/*فكرة ال rank*/ 
 //قائمة ترتيب للمتبرعين حسب نقاطهم،
 Route::get('/donors/ranking', [DonorRankingController::class, 'index']);
