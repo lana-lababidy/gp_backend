@@ -79,4 +79,80 @@ class RequestCaseController extends Controller
         'progress'          => round($progress, 2) . '%'
     ]);
 }
+// PUT /api/request-cases/{id}
+public function update(Request $request, $id)
+{
+    $requestCase = RequestCase::find($id);
+
+    if (!$requestCase) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Request case not found',
+        ], 404);
+    }
+
+    $validated = $request->validate([
+        'description' => 'sometimes|string',
+        'userName' => 'sometimes|string',
+        'email' => 'sometimes|email',
+        'mobile_number' => 'sometimes|numeric',
+        'importance' => 'sometimes|integer|min:1',
+        'goal_quantity' => 'sometimes|integer|min:0',
+        'fulfilled_quantity' => 'sometimes|integer|min:0',
+        'status_id' => 'sometimes|exists:request_case_statuses,id',
+        'case_c_id' => 'sometimes|exists:case_cs,id',
+        'user_id' => 'sometimes|exists:users,id',
+    ]);
+
+    $requestCase->update($validated);
+
+    return response()->json([
+        'status' => 'success',
+        'data' => $requestCase,
+    ]);
+}
+
+// DELETE /api/request-cases/{id}
+public function destroy($id)
+{
+    $requestCase = RequestCase::find($id);
+
+    if (!$requestCase) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Request case not found',
+        ], 404);
+    }
+
+    $requestCase->delete();
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Request case deleted successfully',
+    ]);
+}
+public function updateStatus(Request $request, $id)
+{
+    $requestCase = RequestCase::find($id);
+
+    if (!$requestCase) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Request case not found',
+        ], 404);
+    }
+
+    $validated = $request->validate([
+        'status_id' => 'required|exists:request_case_statuses,id'
+    ]);
+
+    $requestCase->status_id = $validated['status_id'];
+    $requestCase->save();
+
+    return response()->json([
+        'status' => 'success',
+        'data' => $requestCase,
+    ]);
+}
+
 }

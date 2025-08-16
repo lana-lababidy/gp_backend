@@ -18,6 +18,8 @@ use App\Http\Controllers\CaseGalleryController;
 use App\Http\Controllers\DonorRankingController;
 use App\Http\Controllers\RequestCaseController;
 use App\Http\Controllers\RequestCaseGalleryController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\FqaController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -41,8 +43,20 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post('/cases/{id}/gallery', [CaseGalleryController::class, 'store']);
 
+/* للأدمن  */
+Route::put('/users/{id}', [UserController::class, 'update']);
+Route::delete('/users/{id}', [UserController::class, 'destroy']);
+//تعديل حالة الطلبات يدويً
+Route::put('/requests/{id}/status', [RequestCaseController::class, 'updateStatus']);
 
+Route::post('/fqas', [FqaController::class, 'store']);
+Route::put('/fqas/{id}', [FqaController::class, 'update']);
+Route::delete('/fqas/{id}', [FqaController::class, 'destroy']);
 
+ 
+ Route::put('/request-cases/{id}', [RequestCaseController::class, 'update']);
+ //حذف
+Route::delete('/request-cases/{id}', [RequestCaseController::class, 'destroy']);
 
 //شغالين    flutter
 Route::post('/login-client', [loginClient::class, 'loginClient']);
@@ -86,7 +100,7 @@ Route::get('/request-cases', [RequestCaseController::class, 'index']);
 Route::get('/request-cases/{id}', [RequestCaseController::class, 'show']);
 //إنشاء طلب حالة جديد
 Route::post('/request-cases', [RequestCaseController::class, 'store']);
- 
+
  //عرض نسبة التقدم
 Route::get('progress/{id}', [RequestCaseController::class, 'progress']);
 
