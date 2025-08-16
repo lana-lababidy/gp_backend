@@ -16,7 +16,7 @@ class RequestCasesSeeder extends Seeder
                 'email'             => 'mohammed@example.com',
                 'mobile_number'     => '0977123456',
                 'importance'        => 5,
-                'status_id'         => 1, // Pending
+                'status_id'         => 5, // completed
                 'case_c_id'         => 1, // حملة دفء الشتاء
                 'user_id'           => 1, // محمد
                 'goal_quantity'     => 100,

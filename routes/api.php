@@ -20,6 +20,7 @@ use App\Http\Controllers\RequestCaseController;
 use App\Http\Controllers\RequestCaseGalleryController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FqaController;
+use App\Http\Controllers\ReportController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -43,19 +44,22 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post('/cases/{id}/gallery', [CaseGalleryController::class, 'store']);
 
-/* للأدمن  */
+/* للأدمن API  */
+//تعديل يوزر
 Route::put('/users/{id}', [UserController::class, 'update']);
+
 Route::delete('/users/{id}', [UserController::class, 'destroy']);
 //تعديل حالة الطلبات يدويً
 Route::put('/requests/{id}/status', [RequestCaseController::class, 'updateStatus']);
-
+/*للاسئلة الشائعة */
 Route::post('/fqas', [FqaController::class, 'store']);
 Route::put('/fqas/{id}', [FqaController::class, 'update']);
 Route::delete('/fqas/{id}', [FqaController::class, 'destroy']);
-
- 
+//يعرض ملخص كامل للإحصائيات بالموقع: عدد المستخدمين، عدد التبرعات، إجمالي الكميات المتبرع فيها، وعدد الطلبات المكتملة.
+ Route::get('/reports/statistics', [ReportController::class, 'statistics']);
+//تعديل
  Route::put('/request-cases/{id}', [RequestCaseController::class, 'update']);
- //حذف
+
 Route::delete('/request-cases/{id}', [RequestCaseController::class, 'destroy']);
 
 //شغالين    flutter

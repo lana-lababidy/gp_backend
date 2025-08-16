@@ -29,7 +29,7 @@ class DonationsSeeder extends Seeder
                 'case_c_id' => 2, // جمع 100 كرسي
             ],
             [
-                'quantity' => 1,
+                'quantity' => 500,
                 'donation_type_id' => 3, // service
                 'status_id' => 3, // Completed
                 'user_id' => 3, // لانا

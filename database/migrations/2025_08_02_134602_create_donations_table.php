@@ -27,7 +27,6 @@ return new class extends Migration
             $table->foreign('case_c_id')->references('id')->on('case_cs')->onDelete('cascade');
 
             $table->integer('points')->default(0);
-
             $table->timestamps();
         });
     }
