@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -14,7 +15,7 @@ class UserSeeder extends Seeder
         User::create([
             'username' => 'محمد',
             'aliasname' => 'البطل',
-            'password' => '123456',
+            'password' =>  Hash::make('231020'),
             'user_session' => null, // لا يتم ملؤها
             'fcm_token' => null, // لا يتم ملؤها
             'role_id' => 1,
@@ -26,7 +27,7 @@ class UserSeeder extends Seeder
         User::create([
             'username' => 'محمود',
             'aliasname' => 'الوحش',
-            'password' => '654321',
+            'password' => Hash::make('54321'),
             'user_session' => null, // لا يتم ملؤها
             'fcm_token' => null, // لا يتم ملؤها
             'mobile_number' => '0947214749',
@@ -38,7 +39,7 @@ class UserSeeder extends Seeder
         User::create([
             'username' => 'لانا',
             'aliasname' => 'البطلة',
-            'password' => '231020',
+            'password' => Hash::make('231020'),
             'user_session' => null, // لا يتم ملؤها
             'fcm_token' => null, // لا يتم ملؤها
             'role_id' => 2,
@@ -50,7 +51,7 @@ class UserSeeder extends Seeder
         User::create([
             'username' => 'عمر',
             'aliasname' => 'المتبرع الفهيم',
-            'password' => '456789',
+            'password' => Hash::make('456789'),
             'user_session' => null, // لا يتم ملؤها
             'fcm_token' => null, // لا يتم ملؤها
             'role_id' => 2,

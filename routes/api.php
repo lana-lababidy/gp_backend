@@ -44,6 +44,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post('/cases/{id}/gallery', [CaseGalleryController::class, 'store']);
 
+
+
+ 
+//____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+
 /* للأدمن API  */
 //تعديل يوزر
 Route::put('/users/{id}', [UserController::class, 'update']);
@@ -64,6 +70,8 @@ Route::delete('/request-cases/{id}', [RequestCaseController::class, 'destroy']);
 
 //شغالين    flutter
 Route::post('/login-client', [loginClient::class, 'loginClient']);
+
+Route::middleware('auth:sanctum')->post('/logout-client', [loginClient::class, 'logoutClient']);
 
 Route::post('/Otp-Mobile', [generateOtpMobile::class, 'generateOtpMobile']);
 

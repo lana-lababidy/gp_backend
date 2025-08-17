@@ -44,5 +44,15 @@ class loginClient extends Controller
             'token' => $token
         ]);
     }
+      // تسجيل الخروج
+    public function logoutClient(Request $request)
+    {
+        // يمسح الـ token الخاص بالـ client الذي أرسل الطلب
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'message' => 'Logged out successfully'
+        ]);
+    }
 }
 
