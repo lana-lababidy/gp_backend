@@ -28,8 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
 }); 
 
 // Route::post('/generate-otp', [generateOtp::class, 'generateOtp']);
-
-
+//
 // Route::middleware('auth:sanctum')->post('/update-secret-info', [UpdateSecretInfo::class, 'update']);
 Route::post('/login-admin', [loginAdmin::class, 'login']);
 
