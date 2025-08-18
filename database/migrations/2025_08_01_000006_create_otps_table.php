@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('otps', function (Blueprint $table) {
             $table->id();  // Primary key
             $table->string('otp', 4);
-            $table->string('email')->nullable();
+            // $table->string('email')->nullable();
             $table->boolean('is_used')->default(false);
             $table->timestamp('expires_at')->nullable(); // لإضافة صلاحية للـ OTP
             $table->string('mobile_number');

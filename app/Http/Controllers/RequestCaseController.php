@@ -68,7 +68,8 @@ class RequestCaseController extends Controller
             'progress' => 0
         ], 400);
     }
-
+//تقسيم الكمية المُنجزة على الكمية الكاملة المطلوبة. 
+//ضرب النتيجة بـ 100
     $progress = ($requestCase->fulfilled_quantity / $requestCase->goal_quantity) * 100;
 
     return response()->json([

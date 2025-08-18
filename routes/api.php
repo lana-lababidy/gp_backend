@@ -1,7 +1,7 @@
 <?php
 use App\Http\Controllers\UserProfileController;
 // use App\Http\Controllers\CaseController;
-use App\Http\Controllers\ContinueWithEmail;
+use App\Http\Controllers\ContinueWithMobile;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\generateOtp;
 use App\Http\Controllers\loginAdmin;
@@ -27,9 +27,8 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
 }); 
 
-Route::post('/generate-otp', [generateOtp::class, 'generateOtp']);
+// Route::post('/generate-otp', [generateOtp::class, 'generateOtp']);
 
-Route::post('/continue-with-email', [ContinueWithEmail::class, 'ContinueWithEmail']);
 
 // Route::middleware('auth:sanctum')->post('/update-secret-info', [UpdateSecretInfo::class, 'update']);
 Route::post('/login-admin', [loginAdmin::class, 'login']);
@@ -73,7 +72,9 @@ Route::post('/login-client', [loginClient::class, 'loginClient']);
 
 Route::middleware('auth:sanctum')->post('/logout-client', [loginClient::class, 'logoutClient']);
 
-Route::post('/Otp-Mobile', [generateOtpMobile::class, 'generateOtpMobile']);
+Route::post('/generate-otp', [generateOtpMobile::class, 'generateOtpMobile']);
+
+Route::post('/cwm', [continueWithMobile::class, 'continueWithMobile']);
 
 /* first module secret-info*/
 // لجلب كل الـ SecretInfos
