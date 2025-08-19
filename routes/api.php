@@ -95,7 +95,8 @@ PATCH:
  */
 
 
-/*  cases*/
+/*  cases   فلترة /cases?donation_type=1 
+/cases?donation_type=2 //// /cases?donation_type=3*/
 //عرض كل الحالات مع تفاصيلها 
 Route::get('/cases', [CaseController::class, 'index']);
 

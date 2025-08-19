@@ -36,6 +36,6 @@ class Case_c extends Model
 
     public function donations()
     {
-        return $this->hasMany(Donation::class, 'case_id');
+        return $this->hasMany(Donation::class, 'case_c_id');
     }
 }
