@@ -126,6 +126,10 @@ Route::post('/donations', [DonationController::class, 'store']); // للمستخ
 
 //بتعرض كل التبرعات 
 Route::get('/donations', [DonationController::class, 'index']);
+
+ // تفاصيل تبرع واحد
+Route::get('/donations/{id}', [DonationController::class, 'show']);
+
 // بتعرض تبرع خاص بحالة 
 Route::get('/requests/{id}/donations', [DonationController::class, 'donationsByRequest']);
 

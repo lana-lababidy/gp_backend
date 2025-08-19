@@ -62,4 +62,22 @@ class DonationController extends Controller
             'data' => $donations
         ]);
     }
+
+    // عرض تفاصيل تبرع واحد (GET /api/donations/{id})
+public function show($id)
+{
+    $donation = Donation::with(['donationType', 'status', 'user', 'case'])->find($id);
+
+    if (!$donation) {
+        return response()->json([
+            'message' => 'التبرع غير موجود'
+        ], 404);
+    }
+
+    return response()->json([
+        'message' => "تفاصيل التبرع رقم {$id}",
+        'data' => $donation
+    ]);
+}
+
 }
