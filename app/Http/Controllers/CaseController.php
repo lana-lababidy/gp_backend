@@ -7,15 +7,24 @@ use Illuminate\Http\Request;
 
 class CaseController extends Controller
 {
-  public function index(Request $request)
+public function index(Request $request)
 {
     // تحميل الحالات مع بيانات الحالة، نوع التبرع، والمستخدم
     $query = Case_C::with(['state', 'donationType', 'user'])
-                   ->withSum('donations', 'quantity'); // مجموع التبرعات لكل حالة
+        ->withSum('donations', 'quantity'); // مجموع التبرعات لكل حالة
 
     // فلترة حسب نوع التبرع إذا تم إرسال parameter
     if ($request->has('donation_type')) {
         $query->where('donation_type_id', $request->donation_type);
+    }
+
+    // البحث بالكلمات إذا تم إرسال parameter search
+    if ($request->has('search')) {
+        $search = $request->search;
+        $query->where(function($q) use ($search) {
+            $q->where('title', 'like', "%$search%")
+              ->orWhere('description', 'like', "%$search%");
+        });
     }
 
     $cases = $query->get();
@@ -36,6 +45,7 @@ class CaseController extends Controller
         'data' => $cases
     ]);
 }
+
     public function show($id)
     {
         $case = Case_c::with(['state', 'donationType', 'user'])

@@ -96,7 +96,8 @@ PATCH:
 
 
 /*  cases   فلترة /cases?donation_type=1 
-/cases?donation_type=2 //// /cases?donation_type=3*/
+/cases?donation_type=2 //// /cases?donation_type=3
++ بحث  cases?search=----*/
 //عرض كل الحالات مع تفاصيلها 
 Route::get('/cases', [CaseController::class, 'index']);
 
