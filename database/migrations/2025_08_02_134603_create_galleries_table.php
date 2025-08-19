@@ -19,10 +19,13 @@ return new class extends Migration
             $table->string('caption');
             $table->string('title');
 
-            $table->unsignedBigInteger('donation_id');
+            $table->unsignedBigInteger('donation_id')->nullable();
             $table->foreign('donation_id')->references('id')->on('donations')->onDelete('cascade');
 
-            $table->unsignedBigInteger('case_c_id');
+            $table->unsignedBigInteger('request_case_id')->nullable();
+            $table->foreign('request_case_id')->references('id')->on('request_cases')->onDelete('cascade');
+
+            $table->unsignedBigInteger('case_c_id')->nullable();
             $table->foreign('case_c_id')->references('id')->on('case_cs')->onDelete('cascade');
 
             $table->timestamps();

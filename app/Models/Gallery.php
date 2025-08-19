@@ -9,18 +9,18 @@ class Gallery extends Model
     protected $table = 'galleries';
 
     protected $fillable = [
-        'caption',
-        'file_path',
-        'media_type',
-        'case_id',
-        'title',    ];
+        'media_type', 'file_path', 'caption', 'title', 'donation_id', 'case_c_id', 'request_case_id'    ];
 
     // علاقة Many to One مع Case
     public function case()
     {
-        return $this->belongsTo(Case_c::class, 'case_id');
+        return $this->belongsTo(Case_c::class, 'case_c_id');
     }
-
+    // علاقة مع طلب الحالة (RequestCase)
+    public function requestCase()
+    {
+        return $this->belongsTo(RequestCase::class, 'request_case_id');
+    }
     // لو في علاقة مع Donation (حسب ما ذكرت في الـERD)
     public function donation()
     {

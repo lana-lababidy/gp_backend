@@ -20,6 +20,7 @@ use App\Http\Controllers\RequestCaseController;
 use App\Http\Controllers\RequestCaseGalleryController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FqaController;
+use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\ReportController;
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -40,7 +41,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/user', [UserProfileController::class, 'update']);
 });
 
-Route::post('/cases/{id}/gallery', [CaseGalleryController::class, 'store']);
+
+// معرض الحالة
+Route::get('/cases/{caseId}/gallery', [GalleryController::class, 'getCaseGallery']);
+Route::post('/cases/{caseId}/gallery', [GalleryController::class, 'storeCaseGallery']);
+
+// معرض طلب الحالة
+Route::get('/requests/{requestId}/gallery', [GalleryController::class, 'getRequestGallery']);
+Route::post('/requests/{requestId}/gallery', [GalleryController::class, 'storeRequestGallery']);
+
+// معرض التبرع
+Route::get('/donations/{donationId}/gallery', [GalleryController::class, 'getDonationGallery']);
+Route::post('/donations/{donationId}/gallery', [GalleryController::class, 'storeDonationGallery']);
 
 
 

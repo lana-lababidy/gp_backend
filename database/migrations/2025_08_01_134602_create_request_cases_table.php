@@ -21,7 +21,8 @@ return new class extends Migration
             $table->integer('goal_quantity');
             $table->integer('fulfilled_quantity')->default(0);
 
-            $table->foreignId('status_id')->constrained('request_case_statuses')->onDelete('cascade');
+            $table->foreignId('status_id')->nullable()->constrained('request_case_statuses')->onDelete('cascade');
+
             $table->foreignId('case_c_id')->constrained('case_cs')->onDelete('cascade');
 
             $table->unsignedBigInteger('user_id');
