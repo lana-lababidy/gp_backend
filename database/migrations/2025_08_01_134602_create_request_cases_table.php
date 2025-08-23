@@ -15,11 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('description');
             $table->string('userName');
-            $table->string('email');
+            // $table->string('email');
             $table->bigInteger('mobile_number');
             $table->integer('importance');
             $table->integer('goal_quantity');
             $table->integer('fulfilled_quantity')->default(0);
+            $table->string('status')->default('pending'); // بدون after
 
             $table->foreignId('status_id')->nullable()->constrained('request_case_statuses')->onDelete('cascade');
 

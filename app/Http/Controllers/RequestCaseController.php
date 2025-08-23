@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Case_c;
 use App\Models\RequestCase;
 use Illuminate\Http\Request;
 
@@ -34,126 +35,209 @@ class RequestCaseController extends Controller
             'data' => $requestCase,
         ]);
     }
-
+    //1 المستخدم يضيف طلب حالة
     // POST /api/request-cases
     public function store(Request $request)
     {
-
+        // تحقق من البيانات المرسلة
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'description' => 'required|string',
             'status_id' => 'required|exists:request_case_statuses,id',
             'userName' => 'required|string',
-            'email' => 'required|email',
             'mobile_number' => 'required|numeric',
             'importance' => 'required|integer|min:1',
-            'case_c_id' => 'required|exists:case_cs,id', // لو بدك تربط بالحالة الأساسية
+            'case_c_id' => 'required|exists:case_cs,id',
+            'goal_quantity' => 'nullable|integer|min:0',
+            'fulfilled_quantity' => 'nullable|integer|min:0',
+            'status' => 'nullable|string',
         ]);
 
-        $newRequestCase = RequestCase::create($validated);
+        try {
+            $requestCase = RequestCase::create([
+                'user_id' => $validated['user_id'],
+                'description' => $validated['description'],
+                'status_id' => $validated['status_id'],
+                'userName' => $validated['userName'],
+                'mobile_number' => $validated['mobile_number'],
+                'importance' => $validated['importance'],
+                'case_c_id' => $validated['case_c_id'],
+                'goal_quantity' => $validated['goal_quantity'] ?? 0,
+                'fulfilled_quantity' => $validated['fulfilled_quantity'] ?? 0,
+                'status' => $validated['status'] ?? 'pending',
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'تم إرسال الحالة للمراجعة.',
+                'data' => $requestCase
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    //2 الادمن يشوف كل الطلبات بانتظار المراجعة
+    public function pendingRequests()
+    {
+        $requests = RequestCase::where('status', 'pending')->get();
 
         return response()->json([
             'status' => 'success',
-            'data' => $newRequestCase,
-        ], 201);
+            'data' => $requests
+        ]);
     }
-      // GET /api/request-cases/{id}
-   public function progress($id)
-{
-    $requestCase = RequestCase::findOrFail($id);
+    // الادمن يقبل الطلب → يتحول إلى Case أساسي
+    public function approveRequest($id)
+    {
+        try {
+            $requestCase = RequestCase::findOrFail($id);
 
-    if ($requestCase->goal_quantity <= 0) {
+            if ($requestCase->status !== 'pending') {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'هذا الطلب تمت مراجعته مسبقاً.'
+                ], 400);
+            }
+
+            // إنشاء نسخة في جدول الحالات الأساسية
+            $case = Case_c::create([
+                'title' => 'بدون عنوان',          // ← دائمًا عنوان افتراضي
+                'description' => $requestCase->description,
+                'goal_amount' => $requestCase->goal_amount ?? 0,
+                'user_id' => $requestCase->user_id,
+                'states_id' => 1, // حالة أولية "مفتوحة"
+                'donation_type_id' => 1, // مؤقت أو حسب المطلوب
+            ]);
+
+            // تحديث حالة الطلب
+            $requestCase->update(['status' => 'approved']);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'تمت الموافقة على الطلب وإنشاء الحالة الأساسية.',
+                'data' => $case
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage() // رسالة الخطأ الحقيقية
+            ], 500);
+        }
+    }
+
+    //4الادمن يرفض الطلب 
+    public function rejectRequest($id)
+    {
+        $requestCase = RequestCase::findOrFail($id);
+
+        $requestCase->update(['status' => 'rejected']);
+
         return response()->json([
-            'message' => 'لم يتم تحديد كمية الهدف لهذا الطلب.',
-            'progress' => 0
-        ], 400);
+            'status' => 'success',
+            'message' => 'تم رفض الطلب.'
+        ]);
     }
-//تقسيم الكمية المُنجزة على الكمية الكاملة المطلوبة. 
-//ضرب النتيجة بـ 100
-    $progress = ($requestCase->fulfilled_quantity / $requestCase->goal_quantity) * 100;
 
-    return response()->json([
-        'id'                => $requestCase->id,
-        'description'       => $requestCase->description,
-        'goal_quantity'     => $requestCase->goal_quantity,
-        'fulfilled_quantity'=> $requestCase->fulfilled_quantity,
-        'progress'          => round($progress, 2) . '%'
-    ]);
-}
-// PUT /api/request-cases/{id}
-public function update(Request $request, $id)
-{
-    $requestCase = RequestCase::find($id);
+    // GET /api/request-cases/{id}
+    public function progress($id)
+    {
+        $requestCase = RequestCase::findOrFail($id);
 
-    if (!$requestCase) {
+        if ($requestCase->goal_quantity <= 0) {
+            return response()->json([
+                'message' => 'لم يتم تحديد كمية الهدف لهذا الطلب.',
+                'progress' => 0
+            ], 400);
+        }
+        //تقسيم الكمية المُنجزة على الكمية الكاملة المطلوبة. 
+        //ضرب النتيجة بـ 100
+        $progress = ($requestCase->fulfilled_quantity / $requestCase->goal_quantity) * 100;
+
         return response()->json([
-            'status' => 'error',
-            'message' => 'Request case not found',
-        ], 404);
+            'id'                => $requestCase->id,
+            'description'       => $requestCase->description,
+            'goal_quantity'     => $requestCase->goal_quantity,
+            'fulfilled_quantity' => $requestCase->fulfilled_quantity,
+            'progress'          => round($progress, 2) . '%'
+        ]);
     }
+    // PUT /api/request-cases/{id}
+    public function update(Request $request, $id)
+    {
+        $requestCase = RequestCase::find($id);
 
-    $validated = $request->validate([
-        'description' => 'sometimes|string',
-        'userName' => 'sometimes|string',
-        'email' => 'sometimes|email',
-        'mobile_number' => 'sometimes|numeric',
-        'importance' => 'sometimes|integer|min:1',
-        'goal_quantity' => 'sometimes|integer|min:0',
-        'fulfilled_quantity' => 'sometimes|integer|min:0',
-        'status_id' => 'sometimes|exists:request_case_statuses,id',
-        'case_c_id' => 'sometimes|exists:case_cs,id',
-        'user_id' => 'sometimes|exists:users,id',
-    ]);
+        if (!$requestCase) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Request case not found',
+            ], 404);
+        }
 
-    $requestCase->update($validated);
+        $validated = $request->validate([
+            'description' => 'sometimes|string',
+            'userName' => 'sometimes|string',
+            'email' => 'sometimes|email',
+            'mobile_number' => 'sometimes|numeric',
+            'importance' => 'sometimes|integer|min:1',
+            'goal_quantity' => 'sometimes|integer|min:0',
+            'fulfilled_quantity' => 'sometimes|integer|min:0',
+            'status_id' => 'sometimes|exists:request_case_statuses,id',
+            'case_c_id' => 'sometimes|exists:case_cs,id',
+            'user_id' => 'sometimes|exists:users,id',
+        ]);
 
-    return response()->json([
-        'status' => 'success',
-        'data' => $requestCase,
-    ]);
-}
+        $requestCase->update($validated);
 
-// DELETE /api/request-cases/{id}
-public function destroy($id)
-{
-    $requestCase = RequestCase::find($id);
-
-    if (!$requestCase) {
         return response()->json([
-            'status' => 'error',
-            'message' => 'Request case not found',
-        ], 404);
+            'status' => 'success',
+            'data' => $requestCase,
+        ]);
     }
 
-    $requestCase->delete();
+    // DELETE /api/request-cases/{id}
+    public function destroy($id)
+    {
+        $requestCase = RequestCase::find($id);
 
-    return response()->json([
-        'status' => 'success',
-        'message' => 'Request case deleted successfully',
-    ]);
-}
-public function updateStatus(Request $request, $id)
-{
-    $requestCase = RequestCase::find($id);
+        if (!$requestCase) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Request case not found',
+            ], 404);
+        }
 
-    if (!$requestCase) {
+        $requestCase->delete();
+
         return response()->json([
-            'status' => 'error',
-            'message' => 'Request case not found',
-        ], 404);
+            'status' => 'success',
+            'message' => 'Request case deleted successfully',
+        ]);
     }
+    public function updateStatus(Request $request, $id)
+    {
+        $requestCase = RequestCase::find($id);
 
-    $validated = $request->validate([
-        'status_id' => 'required|exists:request_case_statuses,id'
-    ]);
+        if (!$requestCase) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Request case not found',
+            ], 404);
+        }
 
-    $requestCase->status_id = $validated['status_id'];
-    $requestCase->save();
+        $validated = $request->validate([
+            'status_id' => 'required|exists:request_case_statuses,id'
+        ]);
 
-    return response()->json([
-        'status' => 'success',
-        'data' => $requestCase,
-    ]);
-}
+        $requestCase->status_id = $validated['status_id'];
+        $requestCase->save();
 
+        return response()->json([
+            'status' => 'success',
+            'data' => $requestCase,
+        ]);
+    }
 }

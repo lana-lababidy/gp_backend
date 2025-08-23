@@ -8,16 +8,18 @@ class RequestCase extends Model
 {
     protected $table = 'request_cases';
     protected $fillable = [
+        'user_id',
         'description',
+        'status_id',
         'userName',
-        'email',
+        // 'email',
         'mobile_number',
         'importance',
-        'status_id',
-        'user_id',
         'case_c_id',
         'goal_quantity',
-        'fulfilled_quantity'
+        'fulfilled_quantity',
+            'status'
+
     ];
 
     public function user()

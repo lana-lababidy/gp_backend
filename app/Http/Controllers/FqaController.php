@@ -8,6 +8,18 @@ use App\Models\Fqa;
 
 class FqaController extends Controller
 {
+    // عرض كل الأسئلة الشائعة مع الإجابات
+    public function index()
+    {
+        // جلب كل الأسئلة مرتبة حسب العمود order (اختياري)
+        $faqs = Fqa::orderBy('order', 'asc')->get();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $faqs
+        ]);
+    }
+
     // إضافة سؤال جديد
     public function store(Request $request)
     {

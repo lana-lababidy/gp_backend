@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\UserProfileController;
 // use App\Http\Controllers\CaseController;
 use App\Http\Controllers\ContinueWithMobile;
@@ -25,8 +26,7 @@ use App\Http\Controllers\ReportController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::middleware('auth:sanctum')->group(function () {
-}); 
+Route::middleware('auth:sanctum')->group(function () {});
 
 // Route::post('/generate-otp', [generateOtp::class, 'generateOtp']);
 //
@@ -42,17 +42,9 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 
-// معرض الحالة
-Route::get('/cases/{caseId}/gallery', [GalleryController::class, 'getCaseGallery']);
-Route::post('/cases/{caseId}/gallery', [GalleryController::class, 'storeCaseGallery']);
-
-// معرض طلب الحالة
-Route::get('/requests/{requestId}/gallery', [GalleryController::class, 'getRequestGallery']);
-Route::post('/requests/{requestId}/gallery', [GalleryController::class, 'storeRequestGallery']);
 
 
 
- 
 //____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 
 
@@ -61,18 +53,34 @@ Route::post('/requests/{requestId}/gallery', [GalleryController::class, 'storeRe
 Route::put('/users/{id}', [UserController::class, 'update']);
 
 Route::delete('/users/{id}', [UserController::class, 'destroy']);
+
 //تعديل حالة الطلبات يدويً
 Route::put('/requests/{id}/status', [RequestCaseController::class, 'updateStatus']);
+
 /*للاسئلة الشائعة */
 Route::post('/fqas', [FqaController::class, 'store']);
 Route::put('/fqas/{id}', [FqaController::class, 'update']);
 Route::delete('/fqas/{id}', [FqaController::class, 'destroy']);
+
 //يعرض ملخص كامل للإحصائيات بالموقع: عدد المستخدمين، عدد التبرعات، إجمالي الكميات المتبرع فيها، وعدد الطلبات المكتملة.
- Route::get('/reports/statistics', [ReportController::class, 'statistics']);
+Route::get('/reports/statistics', [ReportController::class, 'statistics']);
+
 //تعديل
- Route::put('/request-cases/{id}', [RequestCaseController::class, 'update']);
+Route::put('/request-cases/{id}', [RequestCaseController::class, 'update']);
 
 Route::delete('/request-cases/{id}', [RequestCaseController::class, 'destroy']);
+
+//2 الادمن يشوف كل الطلبات بانتظار المراجعة
+Route::post('/request-cases/pending', [RequestCaseController::class, 'pendingRequests']);
+
+//4الادمن يرفض الطلب 
+Route::post('/request-cases/{id}/reject', [RequestCaseController::class, 'rejectRequest']);
+
+// الادمن يقبل الطلب → يتحول إلى Case أساسي
+Route::post('/request-cases/{id}/approve', [RequestCaseController::class, 'approveRequest']);
+
+//____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
 
 //شغالين    flutter
 Route::post('/login-client', [loginClient::class, 'loginClient']);
@@ -94,7 +102,7 @@ Route::post('/secret-info', [SecretInfoController::class, 'store']);
 
 Route::put('/secret-info/{id}', [SecretInfoController::class, 'update']);
 
-Route::patch('/secret-info/{id}', [SecretInfoController::class, 'update']);
+Route::patch('/secret-info/{id}', [SecretInfoController::class, 'getByUser']);
 /*
 PUT:
  لتحديث السجل بالكامل.
@@ -113,7 +121,7 @@ Route::get('/cases', [CaseController::class, 'index']);
 Route::get('/cases/{id}', [CaseController::class, 'show']);
 
 //إنشاء حالة جديدة
-Route::post('/cases', [CaseController::class, 'store']);
+// Route::post('/cases', [CaseController::class, 'store']);
 
 /*  request-cases*/
 //عرض كل طلبات الحالات (يشمل حالة الطلب، وصف، رقم الهاتف...)
@@ -123,25 +131,37 @@ Route::get('/request-cases/{id}', [RequestCaseController::class, 'show']);
 //إنشاء طلب حالة جديد
 Route::post('/request-cases', [RequestCaseController::class, 'store']);
 
- //عرض نسبة التقدم
+//عرض نسبة التقدم
 Route::get('progress/{id}', [RequestCaseController::class, 'progress']);
 
 
 /*Donation*/
 //إضافة تبرع جديد (Donation) في
-
 Route::post('/donations', [DonationController::class, 'store']); // للمستخدمين'
 
 //بتعرض كل التبرعات 
 Route::get('/donations', [DonationController::class, 'index']);
 
- // تفاصيل تبرع واحد
+// تفاصيل تبرع واحد
 Route::get('/donations/{id}', [DonationController::class, 'show']);
 
 // بتعرض تبرع خاص بحالة 
 Route::get('/requests/{id}/donations', [DonationController::class, 'donationsByRequest']);
 
 
-/*فكرة ال rank*/ 
+/*فكرة ال rank*/
 //قائمة ترتيب للمتبرعين حسب نقاطهم،
 Route::get('/donors/ranking', [DonorRankingController::class, 'index']);
+
+/*gallery */
+// معرض الحالة
+Route::get('/cases/{caseId}/gallery', [GalleryController::class, 'getCaseGallery']);
+Route::post('/cases/{caseId}/gallery', [GalleryController::class, 'storeCaseGallery']);
+
+// معرض طلب الحالة
+Route::get('/requests/{requestId}/gallery', [GalleryController::class, 'getRequestGallery']);
+Route::post('/requests/{requestId}/gallery', [GalleryController::class, 'storeRequestGallery']);
+
+
+// عرض كل الأسئلة الشائعة مع الإجابات
+Route::get('/faqs', [FqaController::class, 'index']);

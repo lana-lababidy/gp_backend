@@ -89,22 +89,22 @@ public function index(Request $request)
     // }
 
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'goal_amount' => 'required|numeric',
-            'states_id' => 'required|exists:case_states,id',
-            'donation_type_id' => 'required|exists:donation_types,id',
-            'user_id' => 'required|exists:users,id',
-        ]);
+    // public function store(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'title' => 'required|string|max:255',
+    //         'description' => 'required|string',
+    //         'goal_amount' => 'required|numeric',
+    //         'states_id' => 'required|exists:case_states,id',
+    //         'donation_type_id' => 'required|exists:donation_types,id',
+    //         'user_id' => 'required|exists:users,id',
+    //     ]);
 
-        $case = Case_c::create($validated);
+    //     $case = Case_c::create($validated);
 
-        return response()->json([
-            'status' => 'success',
-            'data' => $case
-        ], 201);
-    }
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'data' => $case
+    //     ], 201);
+    // }
 }

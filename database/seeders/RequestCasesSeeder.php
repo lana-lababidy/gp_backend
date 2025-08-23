@@ -13,7 +13,7 @@ class RequestCasesSeeder extends Seeder
             [
                 'description'       => 'جمع 100 كرسي',
                 'userName'          => 'محمد',
-                'email'             => 'mohammed@example.com',
+                // 'email'             => 'mohammed@example.com',
                 'mobile_number'     => '0977123456',
                 'importance'        => 5,
                 'status_id'         => 5, // completed
@@ -25,7 +25,7 @@ class RequestCasesSeeder extends Seeder
             [
                 'description'       => 'توفير لوازم مدرسية.',
                 'userName'          => 'لانا',
-                'email'             => 'lana@example.com',
+                // 'email'             => 'lana@example.com',
                 'mobile_number'     => '0977123456',
                 'importance'        => 3,
                 'status_id'         => 2, // Accepted
@@ -37,7 +37,7 @@ class RequestCasesSeeder extends Seeder
             [
                 'description'       => 'مساعدة لترميم الفصول الدراسية.',
                 'userName'          => 'عمر',
-                'email'             => 'omar@example.com',
+                // 'email'             => 'omar@example.com',
                 'mobile_number'     => '0912345678',
                 'importance'        => 4,
                 'status_id'         => 3, // In Review
