@@ -11,19 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('galleries', function (Blueprint $table) {
+        Schema::create('request_galleries', function (Blueprint $table) {
             $table->id();
-
+            $table->timestamps();
             $table->string('media_type');
             $table->string('file_path');
-            $table->string('caption');
-            $table->string('title');
-
-
-            $table->unsignedBigInteger('case_c_id')->nullable();
-            $table->foreign('case_c_id')->references('id')->on('case_cs')->onDelete('cascade');
-
-            $table->timestamps();
+            $table->string('title')->nullable();
+            $table->string('caption')->nullable();
+            $table->unsignedBigInteger('request_case_id')->nullable();
+            $table->foreign('request_case_id')->references('id')->on('request_cases')->onDelete('cascade');
         });
     }
 
@@ -32,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('galleries');
+        Schema::dropIfExists('request_galleries');
     }
 };

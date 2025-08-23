@@ -50,10 +50,6 @@ Route::post('/cases/{caseId}/gallery', [GalleryController::class, 'storeCaseGall
 Route::get('/requests/{requestId}/gallery', [GalleryController::class, 'getRequestGallery']);
 Route::post('/requests/{requestId}/gallery', [GalleryController::class, 'storeRequestGallery']);
 
-// معرض التبرع
-Route::get('/donations/{donationId}/gallery', [GalleryController::class, 'getDonationGallery']);
-Route::post('/donations/{donationId}/gallery', [GalleryController::class, 'storeDonationGallery']);
-
 
 
  

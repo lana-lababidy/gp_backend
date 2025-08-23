@@ -31,7 +31,7 @@ class Case_c extends Model
 
     public function gallery()
     {
-        return $this->hasMany(Gallery::class, 'case_id');
+        return $this->hasMany(Gallery::class, 'case_c_id');
     }
 
     public function donations()

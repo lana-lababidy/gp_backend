@@ -29,4 +29,8 @@ class RequestCase extends Model
     {
         return $this->belongsTo(RequestCaseStatus::class, 'status_id');
     }
+    public function galleries()
+    {
+        return $this->hasMany(RequestGallery::class, 'request_case_id');
+    }
 }
