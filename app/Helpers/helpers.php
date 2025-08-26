@@ -26,7 +26,16 @@ if (! function_exists('checkRole')) {
 
         return $role->name;
     }
-
-
-    
 }
+
+
+/*بحط 
+
+        $sessionToken = $request->header('session-token'); // أو أي طريقة تحصلين فيها على التوكن
+
+        $roleName = checkRole($request->header('session-token'));
+
+        if ($roleName === 'plz login to continue' || $roleName === 'Role not assigned') {
+            return response()->json(['error' => $roleName], 401);
+        }
+*/

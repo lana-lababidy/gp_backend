@@ -10,12 +10,12 @@ use Illuminate\Support\Facades\Validator;
 
 class loginClient extends Controller
 {
-   
+
     public function loginClient(Request $request)
     {
         // التحقق من المدخلات
         $validator = Validator::make($request->all(), [
-            'username' => 'required|string',
+            // 'username' => 'required|string',
             'mobile_number' => 'required|max:10',
         ]);
 
@@ -24,10 +24,11 @@ class loginClient extends Controller
         }
 
         // البحث عن العميل في قاعدة البيانات
-        $user = User::where('username', $request->username)
-                    ->where('mobile_number', $request->mobile_number)
-                    ->where('role_id', '2') 
-                    ->first();
+        $user = User::where('mobile_number', $request->mobile_number)
+        // where('username', $request->username)
+            
+            ->where('role_id', '2')
+            ->first();
 
         if (!$user) {
             return response()->json(['message' => 'Invalid username, mobile number, or unauthorized'], 401);
@@ -44,7 +45,7 @@ class loginClient extends Controller
             'token' => $token
         ]);
     }
-      // تسجيل الخروج
+    // تسجيل الخروج
     public function logoutClient(Request $request)
     {
         // يمسح الـ token الخاص بالـ client الذي أرسل الطلب
@@ -55,4 +56,3 @@ class loginClient extends Controller
         ]);
     }
 }
-

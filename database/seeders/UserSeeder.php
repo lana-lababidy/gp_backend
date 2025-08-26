@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
     public function run(): void
     { // إنشاء admin
         User::create([
-            'username' => 'محمد',
+            'username' => 'محمود',
             'aliasname' => 'البطل',
             'password' =>  Hash::make('231020'),
             'user_session' => null, // لا يتم ملؤها
@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
 
         // إنشاء زبون
         User::create([
-            'username' => 'محمود',
+            'username' => 'محمد',
             'aliasname' => 'الوحش',
             'password' => Hash::make('54321'),
             'user_session' => null, // لا يتم ملؤها
