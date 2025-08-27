@@ -1,27 +1,34 @@
+# Use official PHP image with FPM
 FROM php:8.2-fpm
 
-RUN apt-get update && apt-get install -y \
-    git unzip curl nginx supervisor libpq-dev libonig-dev libzip-dev \
-    && docker-php-ext-install pdo pdo_mysql pdo_pgsql zip \
-    && rm -rf /var/lib/apt/lists/*
-
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
+# Set working directory
 WORKDIR /var/www/html
-COPY . /var/www/html
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+# Install system dependencies + gettext (envsubst)
+RUN apt-get update && apt-get install -y \
+    git unzip libzip-dev libonig-dev curl supervisor nginx gettext \
+    && docker-php-ext-install pdo_mysql mbstring zip \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Copy project files
+COPY . .
+
+# Copy start script and make it executable
+COPY .deploy/start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
+
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Install composer dependencies
+RUN composer install --no-dev --optimize-autoloader
+
+# Set proper permissions for Laravel folders
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-COPY ./.deploy/nginx.conf /opt/templates/nginx.conf
-COPY ./.deploy/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY ./.deploy/start.sh /usr/local/bin/start.sh
-RUN chmod +x /usr/local/bin/start.sh
+# Expose port 80 (matches nginx inside start.sh)
+EXPOSE 80
 
-RUN rm -f /etc/nginx/sites-enabled/default /etc/nginx/conf.d/default.conf true
-RUN ln -sf /dev/stdout /var/log/nginx/access.log \
- && ln -sf /dev/stderr /var/log/nginx/error.log
-
-EXPOSE 8080
+# Start container
 CMD ["/usr/local/bin/start.sh"]
