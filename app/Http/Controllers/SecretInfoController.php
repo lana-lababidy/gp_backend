@@ -78,6 +78,7 @@ class SecretInfoController extends Controller
 
     $validator = Validator::make($request->all(), [
         'RealName' => 'sometimes|required|string|max:255',
+        // الاسم المستعار  المحافظة 
         'birthdate' => 'sometimes|required|date',
         'email' => 'sometimes|required|email|unique:secret_infos,email,' . $id,
         'gender' => 'sometimes|required|in:male,female,other',

@@ -99,10 +99,19 @@ Route::get('/secret-info', [SecretInfoController::class, 'index']);
 Route::get('/users/{user_id}/secret-info', [SecretInfoController::class, 'getByUser']);
 
 Route::post('/secret-info', [SecretInfoController::class, 'store']);
-
+//صفحة البروفايل
 Route::put('/secret-info/{id}', [SecretInfoController::class, 'update']);
 
 Route::patch('/secret-info/{id}', [SecretInfoController::class, 'getByUser']);
+
+/*  request-cases*/
+//عرض كل طلبات الحالات (يشمل حالة الطلب، وصف، رقم الهاتف...)
+Route::get('/request-cases', [RequestCaseController::class, 'index']);
+//عرض طلب حالة معين
+Route::get('/request-cases/{id}', [RequestCaseController::class, 'show']);
+//إنشاء طلب حالة جديد
+Route::post('/request-cases', [RequestCaseController::class, 'store']);
+
 /*
 PUT:
  لتحديث السجل بالكامل.
@@ -123,16 +132,9 @@ Route::get('/cases/{id}', [CaseController::class, 'show']);
 //إنشاء حالة جديدة
 // Route::post('/cases', [CaseController::class, 'store']);
 
-/*  request-cases*/
-//عرض كل طلبات الحالات (يشمل حالة الطلب، وصف، رقم الهاتف...)
-Route::get('/request-cases', [RequestCaseController::class, 'index']);
-//عرض طلب حالة معين
-Route::get('/request-cases/{id}', [RequestCaseController::class, 'show']);
-//إنشاء طلب حالة جديد
-Route::post('/request-cases', [RequestCaseController::class, 'store']);
-
 //عرض نسبة التقدم
 Route::get('progress/{id}', [RequestCaseController::class, 'progress']);
+
 
 
 /*Donation*/

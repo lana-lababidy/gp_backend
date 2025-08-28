@@ -44,7 +44,7 @@ class RequestCaseController extends Controller
             'user_id' => 'required|exists:users,id',
             'description' => 'required|string',
             'status_id' => 'required|exists:request_case_statuses,id',
-            'userName' => 'required|string',
+            'userName' => 'required|string', //عدلي لتصير المستعار
             'mobile_number' => 'required|numeric',
             'importance' => 'required|integer|min:1',
             'case_c_id' => 'required|exists:case_cs,id',
