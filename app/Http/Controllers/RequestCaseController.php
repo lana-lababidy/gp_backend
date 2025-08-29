@@ -91,10 +91,12 @@ class RequestCaseController extends Controller
         ]);
     }
     // الادمن يقبل الطلب → يتحول إلى Case أساسي
-    public function approveRequest($id)
+    public function approveRequest($requestCaseId)
     {
         try {
-            $requestCase = RequestCase::findOrFail($id);
+            // 1. جلب الطلب
+
+            $requestCase = RequestCase::findOrFail($requestCaseId);
 
             if ($requestCase->status !== 'pending') {
                 return response()->json([
@@ -102,12 +104,17 @@ class RequestCaseController extends Controller
                     'message' => 'هذا الطلب تمت مراجعته مسبقاً.'
                 ], 400);
             }
+            // 2. حساب النقاط
+            $goalAmount = $requestCase->goal_amount ?? 0;           // المبلغ الإجمالي
+            $points = intval($goalAmount / 1000);                   // كل 1000 ليرة = نقطة
+
 
             // إنشاء نسخة في جدول الحالات الأساسية
             $case = Case_c::create([
-                'title' => 'بدون عنوان',          // ← دائمًا عنوان افتراضي
+                'title' => $requestCase->title,
                 'description' => $requestCase->description,
                 'goal_amount' => $requestCase->goal_amount ?? 0,
+                'points' => $points,
                 'user_id' => $requestCase->user_id,
                 'states_id' => 1, // حالة أولية "مفتوحة"
                 'donation_type_id' => 1, // مؤقت أو حسب المطلوب
@@ -180,7 +187,6 @@ class RequestCaseController extends Controller
         $validated = $request->validate([
             'description' => 'sometimes|string',
             'userName' => 'sometimes|string',
-            'email' => 'sometimes|email',
             'mobile_number' => 'sometimes|numeric',
             'importance' => 'sometimes|integer|min:1',
             'goal_quantity' => 'sometimes|integer|min:0',

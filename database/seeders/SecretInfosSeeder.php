@@ -18,6 +18,7 @@ class SecretInfosSeeder extends Seeder
                 'birthdate' => '1990-01-01',
                 'email' => 'mohammed@example.com',
                 'gender' => 'male',
+                'city' => 'دمشق',
                 'user_id' => 1,
             ],
             [
@@ -25,6 +26,8 @@ class SecretInfosSeeder extends Seeder
                 'birthdate' => '1992-05-10',
                 'email' => 'mahmoud@example.com',
                 'gender' => 'male',
+                'city' => 'دمشق',
+
                 'user_id' => 2,
             ],
             [
@@ -32,6 +35,8 @@ class SecretInfosSeeder extends Seeder
                 'birthdate' => '1998-10-23',
                 'email' => 'lana@example.com',
                 'gender' => 'female',
+                'city' => 'حمص',
+
                 'user_id' => 3,
             ],
             [
@@ -39,6 +44,7 @@ class SecretInfosSeeder extends Seeder
                 'birthdate' => '1988-07-15',
                 'email' => 'omar@example.com',
                 'gender' => 'male',
+                'city' => 'طرطوس',
                 'user_id' => 4,
             ],
         ];

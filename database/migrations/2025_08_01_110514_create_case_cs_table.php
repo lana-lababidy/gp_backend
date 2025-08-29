@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('description');
             $table->decimal('goal_amount', 15, 2);
-
+            $table->integer('points')->default(0);
             $table->foreignId('states_id')->constrained('case_states')->onDelete('cascade');
 
             $table->foreignId('donation_type_id')->constrained('donation_types')->onDelete('cascade');

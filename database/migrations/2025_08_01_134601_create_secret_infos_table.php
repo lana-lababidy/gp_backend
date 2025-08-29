@@ -17,8 +17,22 @@ return new class extends Migration
             $table->string('RealName');
             $table->date('birthdate');
             $table->string('email')->unique();
-        $table->enum('gender', ['male', 'female']);
-
+            $table->enum('gender', ['male', 'female']);
+            $table->enum('city', [
+                'دمشق',
+                'ريف دمشق',
+                'حلب',
+                'حمص',
+                'حماة',
+                'اللاذقية',
+                'طرطوس',
+                'إدلب',
+                'درعا',
+                'السويداء',
+                'دير الزور',
+                'الرقة',
+                'الحسكة'
+            ]);
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });

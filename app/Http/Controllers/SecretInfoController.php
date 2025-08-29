@@ -16,6 +16,7 @@ class SecretInfoController extends Controller
             'birthdate' => 'required|date',
             'email' => 'required|email|unique:secret_infos,email',
             'gender' => 'required|in:male,female,other',
+            'city' => 'required|string|max:100',
             'user_id' => 'required|exists:users,id',
         ]);
 
@@ -31,6 +32,7 @@ class SecretInfoController extends Controller
             'birthdate' => $request->birthdate,
             'email' => $request->email,
             'gender' => $request->gender,
+            'city' => $request->city,
             'user_id' => $request->user_id,
         ]);
 
@@ -40,7 +42,7 @@ class SecretInfoController extends Controller
             'data' => $secretInfo
         ], 201);
     }
-     // جلب كل السجلات
+    // جلب كل السجلات
     public function index()
     {
         $secretInfos = SecretInfo::all();
@@ -67,39 +69,44 @@ class SecretInfoController extends Controller
     }
 
     public function update(Request $request, $id)
-{
-    $secretInfo = SecretInfo::find($id);
+    {
+        $secretInfo = SecretInfo::find($id);
 
-    if (!$secretInfo) {
+        if (!$secretInfo) {
+            return response()->json([
+                'message' => 'Secret info not found.'
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'RealName' => 'sometimes|required|string|max:255',
+            // الاسم المستعار  المحافظة 
+            'birthdate' => 'sometimes|required|date',
+            'email' => 'sometimes|required|email|unique:secret_infos,email,' . $id,
+            'gender' => 'sometimes|required|in:male,female,other',
+            'city' => 'sometimes|required|string|max:100',
+            'user_id' => 'sometimes|required|exists:users,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // نحدّث الحقول اللي أرسلتها فقط
+        $secretInfo->update($request->only([
+            'RealName',
+            'birthdate',
+            'email',
+            'gender',
+            'city',
+            'user_id'
+        ]));
+
         return response()->json([
-            'message' => 'Secret info not found.'
-        ], 404);
+            'message' => 'Secret info updated successfully.',
+            'data' => $secretInfo
+        ], 200);
     }
-
-    $validator = Validator::make($request->all(), [
-        'RealName' => 'sometimes|required|string|max:255',
-        // الاسم المستعار  المحافظة 
-        'birthdate' => 'sometimes|required|date',
-        'email' => 'sometimes|required|email|unique:secret_infos,email,' . $id,
-        'gender' => 'sometimes|required|in:male,female,other',
-        'user_id' => 'sometimes|required|exists:users,id',
-    ]);
-
-    if ($validator->fails()) {
-        return response()->json([
-            'errors' => $validator->errors()
-        ], 422);
-    }
-
-    // نحدّث الحقول اللي أرسلتها فقط
-    $secretInfo->update($request->only([
-        'RealName', 'birthdate', 'email', 'gender', 'user_id'
-    ]));
-
-    return response()->json([
-        'message' => 'Secret info updated successfully.',
-        'data' => $secretInfo
-    ], 200);
-}
-
 }

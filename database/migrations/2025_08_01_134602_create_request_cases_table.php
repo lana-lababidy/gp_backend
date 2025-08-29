@@ -13,14 +13,15 @@ return new class extends Migration
     {
         Schema::create('request_cases', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
             $table->string('description');
             $table->string('userName');
             // $table->string('email');
             $table->bigInteger('mobile_number');
             $table->integer('importance');
-            $table->integer('goal_quantity');
-            $table->integer('fulfilled_quantity')->default(0);
-            $table->string('status')->default('pending'); // بدون after
+            $table->integer('goal_quantity'); //الكمية المطلوبة
+            $table->integer('fulfilled_quantity')->default(0); //كمية التي تم تحقيقها لحد الآن 
+            $table->string('status')->default('pending');
 
             $table->foreignId('status_id')->nullable()->constrained('request_case_statuses')->onDelete('cascade');
 
