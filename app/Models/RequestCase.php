@@ -13,7 +13,6 @@ class RequestCase extends Model
         'description',
         'status_id',
         'userName',
-        // 'email',
         'mobile_number',
         'importance',
         'case_c_id',

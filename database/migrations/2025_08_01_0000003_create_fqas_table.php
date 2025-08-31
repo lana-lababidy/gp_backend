@@ -12,11 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('fqas', function (Blueprint $table) {
-            $table->id();
+ $table->id();
             $table->string('question');
-            $table->text('answer')->unique();
+            // was: $table->text('answer')->unique();
+            $table->string('answer', 191)->unique();   // make it indexable in MySQL
             $table->integer('order');
             $table->timestamps();
+
         });
     }
 
