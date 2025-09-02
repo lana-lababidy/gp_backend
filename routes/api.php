@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\NotificationController;
 
 use App\Http\Controllers\UserProfileController;
 // use App\Http\Controllers\CaseController;
@@ -44,6 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 
+Route::post('/send-notification', [NotificationController::class, 'sendPushNotification']);
 
 //____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 

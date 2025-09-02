@@ -12,16 +12,19 @@ class FirebaseService
 
     public function __construct()
     {
-        $factory = (new Factory)->withServiceAccount(env('FIREBASE_CREDENTIALS'));
+        // Use storage_path helper to get the full path to the service account JSO
+        $serviceAccountPath = storage_path('storage\app\firebase\firebase_credentials.json');
+        $factory = (new Factory)->withServiceAccount($serviceAccountPath);
         $this->messaging = $factory->createMessaging();
     }
 
-    public function sendNotification($token, $title, $body)
+    public function sendNotification($token, $title, $body, $data = [])
     {
         $message = CloudMessage::withTarget('token', $token)
-            ->withNotification(Notification::create($title, $body));
+            ->withNotification(['title' => $title, 'body' => $body])
+            ->withData($data);
 
-        return $this->messaging->send($message);
+        $this->messaging->send($message);
     }
 }
     
