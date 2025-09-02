@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             
             // الهوية
-            $table->string('username')->unique();
+            $table->string('username')->unique()->nullable();
             $table->string('aliasname')->nullable();
             $table->string('mobile_number')->unique();
 
             // الحماية
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->string('user_session')->nullable();
             $table->string('fcm_token')->nullable();
             $table->rememberToken();
