@@ -10,41 +10,37 @@ use Illuminate\Support\Facades\Validator;
 
 class loginClient extends Controller
 {
+public function loginClient(Request $request)
+{
+    // التحقق من المدخلات
+    $validator = Validator::make($request->all(), [
+        'mobile_number' => 'required|max:10',
+    ]);
 
-    public function loginClient(Request $request)
-    {
-        // التحقق من المدخلات
-        $validator = Validator::make($request->all(), [
-            // 'username' => 'required|string',
-            'mobile_number' => 'required|max:10',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => 'Invalid Parameters'], 401);
-        }
-
-        // البحث عن العميل في قاعدة البيانات
-        $user = User::where('mobile_number', $request->mobile_number)
-        // where('username', $request->username)
-            
-            ->where('role_id', '2')
-            ->first();
-
-        if (!$user) {
-            return response()->json(['message' => 'Invalid username, mobile number, or unauthorized'], 401);
-        }
-        //  تأكد من أن علاقة `role` موجودة في `User`:
-        if (!$user->role || $user->role->name !== 'client') {
-            return response()->json(['error' => 'Unauthorized'], 403);
-        }
-        // إنشاء Access Token
-        $token = $user->createToken('ClientAccessToken')->plainTextToken;
-
-        return response()->json([
-            'data' => $user,
-            'token' => $token
-        ]);
+    if ($validator->fails()) {
+        return response()->json(['error' => 'Invalid Parameters'], 401);
     }
+
+    // البحث عن العميل في قاعدة البيانات أو إنشاؤه
+    $user = User::firstOrCreate(
+        ['mobile_number' => $request->mobile_number],
+        ['role_id' => 2] // إذا جديد نخزنه كـ client
+    );
+
+    // تأكد من أن علاقة role موجودة (اختياري إذا عندك علاقة)
+    if (!$user->role || $user->role->name !== 'client') {
+        return response()->json(['error' => 'Unauthorized'], 403);
+    }
+
+    // إنشاء Access Token
+    $token = $user->createToken('ClientAccessToken')->plainTextToken;
+
+    return response()->json([
+        'data' => $user,
+        'token' => $token
+    ]);
+}
+
     // تسجيل الخروج
     public function logoutClient(Request $request)
     {
