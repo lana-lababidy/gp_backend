@@ -11,7 +11,7 @@ class RequestCharge extends Model
     protected $fillable = [
         'user_id',
         'amount',
-        'states_id',
+        'status_id',
         'quantity',
     ];
 

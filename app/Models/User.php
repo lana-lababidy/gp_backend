@@ -29,6 +29,8 @@ class User extends Authenticatable
         'user_session',
         'fcm_token',
         // 'wallet_id',
+        'email',
+
 
     ];
 

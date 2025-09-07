@@ -13,93 +13,49 @@ class loginAdmin extends Controller
 {
     public function login(Request $request)
     {
-        // 1. تجلب توكن الجلسة من هيدر الطلب
-        $sessionToken = $request->header('Session-Token');
-
-        // 2. تستدعي دالة checkRole لتتحقق من الجلسة والدور
-        $role = checkRole($sessionToken,"Admin");
-
-        // 3. إذا الجلسة غير صالحة ترجع رسالة خطأ 401
-        if ($role === 'plz login to continue') {
-            return response()->json(['message' => $role], 401);
-        }
-
-
 
         // التحقق من المدخلات
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'email' => 'required|string|email|max:255|',
             'password' => 'required|string|min:6',
 
         ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => 'Invalid Parameters'], 422);
+        }
 
 
         $user = User::where('email', $request->email)->first();
-
+        // إذا المستخدم غير موجود، أنشئه
         if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
+            $user = User::create([
+                'email' => $request->email,
+                'password' => Hash::make($request->password), // تشفير الباسورد
+                'role_id' => 1, // اجعلها admin إذا تريد إنشاء ادمن جديد
+                'name' => 'Admin', // أو أي قيمة افتراضية للاسم
+                'mobile_number' => null,
+
+            ]);
+        } else {
+            // تحقق كلمة المرور فقط إذا المستخدم موجود
+            if (!Hash::check($request->password, $user->password)) {
+                return response()->json(['message' => 'Invalid password'], 401);
+            }
         }
 
-        // تحقق كلمة المرور
-        if (!Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Invalid password'], 401);
-        }
+        // // تحقق إذا اليوزر هو admin (حسب role_id أو حسب نظامك)
+        // // مثلاً: role_id = 1 يعني admin
+        // if ($user->role_id != 1) {
+        //     return response()->json(['message' => 'Unauthorized: Not admin'], 403);
+        // }
 
-        // تحقق إذا اليوزر هو admin (حسب role_id أو حسب نظامك)
-        // مثلاً: role_id = 1 يعني admin
-        if ($user->role_id != 1) {
-            return response()->json(['message' => 'Unauthorized: Not admin'], 403);
-        }
 
-        // إنشاء جلسة جديدة (session) أو توكن حسب النظام عندك
-        // افتراض: جلسة عادية في جدول sessions (علاقة hasMany)
-//8
-        $session = $user->sessions()->create([
-            'session_token' => bin2hex(random_bytes(32)), // مثال توكن عشوائي
-            'ip_address' => $request->ip(),
-            'user_agent' => $request->header('User-Agent'),
-            'last_activity' => now(),
-        ]);
+        // إنشاء توكن باستخدام Sanctum
+        $token = $user->createToken('AdminAccessToken')->plainTextToken;
 
         return response()->json([
-            'user' => $user,
-            'session' => $session,
+            'data'  => $user,
+            'token' => $token,
         ], 200);
     }
 }
-//         if ($validator->fails()) {
-//             return response()->json(['error' => 'Invalid Parameters'], 401);
-//         }
-
-//         // البحث عن المستخدم بناءً على اسم المستخدم ورقم الهاتف
-//         $user = User::where('username', $request->username)
-//             ->where('email', $request->mobile_number)
-//             ->first();
-
-//         //  التحقق أولًا إذا كان المستخدم موجودًا قبل الوصول إلى role
-//         if ($validator->fails()) {
-//             return response()->json(['message' => 'Invalid username or mobile number'], 401);
-//         }
-//         // ✅ محاولة تسجيل الدخول باستخدام Auth
-//         if (!Auth::attempt($request->only('email', 'password'))) {
-//             return response()->json(['error' => 'Invalid email or password'], 401);
-//         }
-//         // ✅ المستخدم المسجل حاليًا
-//         $user = Auth::user();
-
-//         // //  تأكد من أن علاقة `role` موجودة في `User`:
-//         if (!$user->role || $user->role->name !== 'admin') {
-//             return response()->json(['error' => 'Unauthorized'], 403);
-//         }
-
-
-//         // إنشاء Access Token
-//         // $token = $user->createToken('AdminAccessToken')->accessToken;
-//         $token = $user->createToken('AdminAccessToken')->plainTextToken;
-
-//         return response()->json([
-//             'data' => $user,
-//             'token' => $token
-//         ]);
-//     }
-// }

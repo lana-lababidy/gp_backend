@@ -15,10 +15,11 @@ class UserSeeder extends Seeder
         User::create([
             'username' => 'محمود',
             'aliasname' => 'البطل',
+            'email' => 'mahmoudlab8@gmail.com',
             'password' =>  Hash::make('231020'),
             'user_session' => null, // لا يتم ملؤها
             'fcm_token' => null, // لا يتم ملؤها
-            'role_id' => 1,
+            'role_id' => 1, //admin
             'mobile_number' => '0934271139',
 
         ]);

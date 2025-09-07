@@ -18,7 +18,6 @@ class Wallet extends Model
         'total_points',
     ];
 
-    // 🔁 العلاقة مع المستخدم (واحد إلى واحد)
     public function user()
     {
         return $this->belongsTo(User::class);

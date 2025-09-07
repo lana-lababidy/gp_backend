@@ -13,17 +13,18 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            
+
             // الهوية
             $table->string('username')->unique()->nullable();
             $table->string('aliasname')->nullable();
-            $table->string('mobile_number')->unique();
+            $table->string('mobile_number')->nullable()->unique();
 
             // الحماية
             $table->string('password')->nullable();
             $table->string('user_session')->nullable();
             $table->string('fcm_token')->nullable();
             $table->rememberToken();
+            $table->string('email')->nullable();
             $table->timestamps();
 
             // العلاقات

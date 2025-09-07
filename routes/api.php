@@ -1,5 +1,7 @@
 <?php
+
 use App\Http\Controllers\NotificationController;
+use App\Http\Middleware\AdminMiddleware;
 
 use App\Http\Controllers\UserProfileController;
 // use App\Http\Controllers\CaseController;
@@ -24,7 +26,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\FqaController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\RequestChargeController;
 use App\Http\Controllers\WalletController;
+use App\Http\Middleware\ClientMiddleware;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -39,8 +43,8 @@ Route::patch('/donations/{id}/status', [DonationController::class, 'updateDonati
 
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', [UserProfileController::class, 'show']);
-    Route::put('/user', [UserProfileController::class, 'update']);
+  Route::get('/user', [UserProfileController::class, 'show']);
+  Route::put('/user', [UserProfileController::class, 'update']);
 });
 
 
@@ -84,15 +88,7 @@ Route::post('/request-cases/{id}/approve', [RequestCaseController::class, 'appro
 
 
 
-  // عرض كل طلبات الشحن (مع فلترة حسب الحالة)
-    Route::get('/admin/wallet/topup/requests', [WalletController::class, 'getAllTopupRequests']);
 
-    // الموافقة أو الرفض على طلب شحن
-    Route::post('/admin/wallet/topup/process', [WalletController::class, 'processTopupRequest']);
-
-    // عرض رصيد أي مستخدم
-    Route::get('/admin/wallet/{user_id}/balance', [WalletController::class, 'getUserBalance']);
- 
 //____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 
 
@@ -183,11 +179,33 @@ Route::post('/requests/{requestId}/gallery', [GalleryController::class, 'storeRe
 Route::get('/faqs', [FqaController::class, 'index']);
 
 
-   // إرسال طلب شحن المحفظة
-    Route::post('/wallet/topup/request', [WalletController::class, 'requestTopup']);
+// إرسال طلب شحن المحفظة
+Route::post('/wallet/topup/request', [WalletController::class, 'requestTopup']);
 
-    // عرض تاريخ طلبات الشحن (يمكن فلترة حسب الحالة)
-    Route::get('/wallet/topup/history', [WalletController::class, 'getTopupHistory']);
+// عرض تاريخ طلبات الشحن (يمكن فلترة حسب الحالة)
+Route::get('/wallet/topup/history', [WalletController::class, 'getTopupHistory']);
 
-    // عرض رصيد المحفظة الحالي
-    Route::get('/wallet/balance', [WalletController::class, 'getBalance']);
+// عرض رصيد المحفظة الحالي
+Route::get('/wallet/balance', [WalletController::class, 'getBalance']);
+// عرض كل طلبات الشحن (مع فلترة حسب الحالة)
+Route::get('/admin/wallet/topup/requests', [WalletController::class, 'getAllTopupRequests']);
+
+// الموافقة أو الرفض على طلب شحن
+Route::post('/admin/wallet/topup/process', [WalletController::class, 'processTopupRequest']);
+
+// عرض رصيد أي مستخدم
+Route::get('/admin/wallet/{user_id}/balance', [WalletController::class, 'getUserBalance']);
+
+
+Route::post('/request-charge', [RequestChargeController::class, 'store']);
+
+Route::get('/request-charges', [RequestChargeController::class, 'index']);
+
+// الأدمن يوافق على طلب
+
+Route::post('/request-charge/{id}/approve', [RequestChargeController::class, 'approve'])
+  ->middleware(AdminMiddleware::class);
+
+// الأدمن يرفض طلب
+Route::post('/request-charge/{id}/reject', [RequestChargeController::class, 'reject'])
+  ->middleware(AdminMiddleware::class);
