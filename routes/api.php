@@ -24,6 +24,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\FqaController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\WalletController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -81,6 +82,17 @@ Route::post('/request-cases/{id}/reject', [RequestCaseController::class, 'reject
 // الادمن يقبل الطلب → يتحول إلى Case أساسي
 Route::post('/request-cases/{id}/approve', [RequestCaseController::class, 'approveRequest']);
 
+
+
+  // عرض كل طلبات الشحن (مع فلترة حسب الحالة)
+    Route::get('/admin/wallet/topup/requests', [WalletController::class, 'getAllTopupRequests']);
+
+    // الموافقة أو الرفض على طلب شحن
+    Route::post('/admin/wallet/topup/process', [WalletController::class, 'processTopupRequest']);
+
+    // عرض رصيد أي مستخدم
+    Route::get('/admin/wallet/{user_id}/balance', [WalletController::class, 'getUserBalance']);
+ 
 //____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 
 
@@ -169,3 +181,13 @@ Route::post('/requests/{requestId}/gallery', [GalleryController::class, 'storeRe
 
 // عرض كل الأسئلة الشائعة مع الإجابات
 Route::get('/faqs', [FqaController::class, 'index']);
+
+
+   // إرسال طلب شحن المحفظة
+    Route::post('/wallet/topup/request', [WalletController::class, 'requestTopup']);
+
+    // عرض تاريخ طلبات الشحن (يمكن فلترة حسب الحالة)
+    Route::get('/wallet/topup/history', [WalletController::class, 'getTopupHistory']);
+
+    // عرض رصيد المحفظة الحالي
+    Route::get('/wallet/balance', [WalletController::class, 'getBalance']);

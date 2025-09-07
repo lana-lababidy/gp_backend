@@ -21,7 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
-            $table->foreignId('status_id')->constrained('request_charge_states')->onDelete('cascade');
+            $table->foreignId('status_id')->constrained('request_charge_states')->default(1)->onDelete('cascade');
 
             $table->timestamps();
         });

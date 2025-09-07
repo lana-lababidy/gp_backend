@@ -15,4 +15,9 @@ class RequestChargeState extends Model
     {
         return $this->hasMany(RequestCase::class, 'status_id');
     }
+    // علاقة Many to One مع المستخدم (User)
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
