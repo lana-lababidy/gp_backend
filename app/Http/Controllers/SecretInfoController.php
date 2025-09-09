@@ -36,6 +36,8 @@ class SecretInfoController extends Controller
             'gender' => $request->gender,
             'city' => $request->city,
             'user_id' => $request->user_id,
+            'aliasname' => $request->aliasname,
+
         ]);
 
         // 3. إرجاع نتيجة ناجحة
@@ -88,7 +90,7 @@ class SecretInfoController extends Controller
             'gender' => 'sometimes|required|in:male,female,other',
             'city' => 'sometimes|required|string|max:100',
             'user_id' => 'sometimes|required|exists:users,id',
-            'aliasname' => 'sometimes|required|string|max:255', 
+            'aliasname' => 'sometimes|required|string|max:255',
 
         ]);
 
