@@ -88,6 +88,8 @@ class SecretInfoController extends Controller
             'gender' => 'sometimes|required|in:male,female,other',
             'city' => 'sometimes|required|string|max:100',
             'user_id' => 'sometimes|required|exists:users,id',
+            'aliasname' => 'sometimes|required|string|max:255', 
+
         ]);
 
         if ($validator->fails()) {
