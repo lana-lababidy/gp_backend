@@ -12,13 +12,15 @@ class SecretInfoController extends Controller
     {
         // 1. التحقق من صحة البيانات (Validation)
         $validator = Validator::make($request->all(), [
-            'RealName' => 'required|string|max:255',
-            'birthdate' => 'required|date',
-            'email' => 'required|email|unique:secret_infos,email',
-            'gender' => 'required|in:male,female,other',
-            'city' => 'required|string|max:100',
-            'user_id' => 'required|exists:users,id',
+            'RealName'   => 'required|string|max:255',
+            'birthdate'  => 'required|date',
+            'email'      => 'required|email|unique:secret_infos,email',
+            'gender'     => 'required|in:male,female',
+            'city'       => 'required|string|max:100',
+            'user_id'    => 'required|exists:users,id',
+            'aliasname'  => 'required|string|max:255',
         ]);
+
 
         if ($validator->fails()) {
             return response()->json([
@@ -101,7 +103,8 @@ class SecretInfoController extends Controller
             'email',
             'gender',
             'city',
-            'user_id'
+            'user_id',
+            'aliasname'
         ]));
 
         return response()->json([

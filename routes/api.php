@@ -114,7 +114,7 @@ Route::post('/login-client', [loginClient::class, 'loginClient']);
   //صفحة البروفايل
   Route::put('/secret-info/{id}', [SecretInfoController::class, 'update']);
 
-  Route::patch('/secret-info/{id}', [SecretInfoController::class, 'getByUser']);
+  Route::patch('/secret-infos/user/{user_id}', [SecretInfoController::class, 'getByUser']);
 
   /*  request-cases*/
   //عرض كل طلبات الحالات (يشمل حالة الطلب، وصف، رقم الهاتف...)
