@@ -16,7 +16,6 @@ class SecretInfo extends Model
         'email',
         'gender',
         'city',
-        'aliasname',
         'user_id'
     ];
     public function user()

@@ -8,13 +8,13 @@ class Kernel extends HttpKernel
 {
   protected $middlewareGroups = [
     'api' => [
-      'throttle:api',
-      \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        'throttle:api',
+        \Illuminate\Routing\Middleware\SubstituteBindings::class,
     ],
-  ];
-  protected $routeMiddleware = [
-    'role' => \App\Http\Middleware\RoleMiddleware::class,
+];
+protected $routeMiddleware = [
     'auth'  => \App\Http\Middleware\Authenticate::class,
+    'admin' => \App\Http\Middleware\AdminMiddleware::class,
+];
 
-  ];
 }

@@ -1,30 +1,20 @@
 <?php
+
 namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Auth\Middleware\Authenticate as Middleware; // مهم جداً
+use Illuminate\Support\Facades\Auth;
 
-class Authenticate extends Middleware
+class Authenticate
 {
-    protected function redirectTo($request)
+    public function handle(Request $request, Closure $next, $guard = null)
     {
-        // لو الطلب API (JSON)، ما نرجع رابط
-        if ($request->expectsJson()) {
-            return null;
+        // التحقق من توكن Sanctum
+        if (!Auth::guard($guard)->check()) {
+            return response()->json(['message' => 'Unauthenticated.'], 401);
         }
 
-        // لو طلب ويب عادي، ممكن ترجع رابط login
-        return route('login'); // تأكد إنك عامل route باسم login
-    }
-
-    protected function unauthenticated($request, array $guards)
-    {
-        if ($request->expectsJson()) {
-            abort(response()->json(['message' => 'Unauthenticated.'], 401));
-        }
-
-        // نستدعي الدالة الأصلية لو مش API
-        parent::unauthenticated($request, $guards);
+        return $next($request);
     }
 }

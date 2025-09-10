@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\RequestCase;
@@ -12,23 +11,10 @@ use App\Models\Case_c;
 use App\Models\CaseState;
 use App\Models\DonationType;
 
-class TestDataSeeder extends Seeder
+class SimpleTestSeeder extends Seeder
 {
     public function run(): void
     {
-        // Clear existing data (use with caution in production)
-        if (config('app.env') !== 'production') {
-            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-            RequestCase::truncate();
-            User::truncate();
-            Role::truncate();
-            RequestCaseStatus::truncate();
-            Case_c::truncate();
-            CaseState::truncate();
-            DonationType::truncate();
-            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-        }
-
         // Create basic lookup data
         $adminRole = Role::create(['name' => 'Admin']);
         $userRole = Role::create(['name' => 'User']);
@@ -38,8 +24,8 @@ class TestDataSeeder extends Seeder
             'code' => 'PENDING'
         ]);
 
-        $activeState = CaseState::create(['name' => 'Active']);
-        $donationType = DonationType::create(['name' => 'Money']);
+        $activeState = CaseState::create(['name' => 'Active', 'code' => 1]);
+        $donationType = DonationType::create(['name' => 'Money', 'code' => 1]);
 
         // Create test users
         $users = [

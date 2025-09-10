@@ -4,18 +4,74 @@ namespace App\Http\Controllers;
 
 use App\Models\Case_c;
 use App\Models\RequestCase;
+use App\Services\AiRankingService;
 use Illuminate\Http\Request;
 
 class RequestCaseController extends Controller
 {
+    protected AiRankingService $aiRankingService;
+
+    public function __construct(AiRankingService $aiRankingService)
+    {
+        $this->aiRankingService = $aiRankingService;
+    }
+
     public function index()
     {
-        $requestCases = RequestCase::with(['status', 'user'])->get();
+        try {
+            $requestCases = RequestCase::with(['status', 'user'])->get();
 
-        return response()->json([
-            'status' => 'success',
-            'data' => $requestCases,
-        ]);
+            if ($requestCases->isEmpty()) {
+                return response()->json([
+                    'status' => 'success',
+                    'data' => [],
+                    'message' => 'No request cases found'
+                ]);
+            }
+
+            // Format requests for AI service
+            $formattedRequests = $requestCases->map(function ($request) {
+                return $this->aiRankingService->formatRequestForAI($request);
+            })->toArray();
+
+            // Get AI rankings
+            $rankedRequests = $this->aiRankingService->rankRequests($formattedRequests);
+
+            // Map back to original request objects with AI scores
+            $rankedData = collect($rankedRequests)->map(function ($aiResult) use ($requestCases) {
+                $originalRequest = $requestCases->firstWhere('id', $aiResult['id']);
+                
+                if ($originalRequest) {
+                    $requestArray = $originalRequest->toArray();
+                    $requestArray['ai_ranking'] = [
+                        'urgency_label' => $aiResult['urgency_label'],
+                        'urgency_score_model' => $aiResult['urgency_score_model'],
+                        'urgency_score_aggressive' => $aiResult['urgency_score_aggressive'],
+                        'is_fallback' => $aiResult['fallback_ranking'] ?? false
+                    ];
+                    return $requestArray;
+                }
+                
+                return null;
+            })->filter()->values();
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $rankedData,
+                'ai_service_healthy' => $this->aiRankingService->isHealthy()
+            ]);
+
+        } catch (\Exception $e) {
+            // Fallback to original behavior if AI service fails
+            $requestCases = RequestCase::with(['status', 'user'])->get();
+            
+            return response()->json([
+                'status' => 'success',
+                'data' => $requestCases,
+                'message' => 'AI ranking unavailable, showing unranked cases',
+                'ai_service_healthy' => false
+            ]);
+        }
     }
 
     // GET /api/request-cases/{id}
@@ -80,15 +136,65 @@ class RequestCaseController extends Controller
         }
     }
 
-    //2 الادمن يشوف كل الطلبات بانتظار المراجعة
+    //2 الادمن يشوف كل الطلبات بانتظار المراجعة (مرتبة حسب الأولوية بالذكاء الاصطناعي)
     public function pendingRequests()
     {
-        $requests = RequestCase::where('status', 'pending')->get();
+        try {
+            $requests = RequestCase::where('status', 'pending')
+                ->with(['status', 'user'])
+                ->get();
 
-        return response()->json([
-            'status' => 'success',
-            'data' => $requests
-        ]);
+            if ($requests->isEmpty()) {
+                return response()->json([
+                    'status' => 'success',
+                    'data' => [],
+                    'message' => 'No pending requests found'
+                ]);
+            }
+
+            // Format requests for AI service
+            $formattedRequests = $requests->map(function ($request) {
+                return $this->aiRankingService->formatRequestForAI($request);
+            })->toArray();
+
+            // Get AI rankings
+            $rankedRequests = $this->aiRankingService->rankRequests($formattedRequests);
+
+            // Map back to original request objects with AI scores
+            $rankedData = collect($rankedRequests)->map(function ($aiResult) use ($requests) {
+                $originalRequest = $requests->firstWhere('id', $aiResult['id']);
+                
+                if ($originalRequest) {
+                    $requestArray = $originalRequest->toArray();
+                    $requestArray['ai_ranking'] = [
+                        'urgency_label' => $aiResult['urgency_label'],
+                        'urgency_score_model' => $aiResult['urgency_score_model'],
+                        'urgency_score_aggressive' => $aiResult['urgency_score_aggressive'],
+                        'is_fallback' => $aiResult['fallback_ranking'] ?? false
+                    ];
+                    return $requestArray;
+                }
+                
+                return null;
+            })->filter()->values();
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $rankedData,
+                'ai_service_healthy' => $this->aiRankingService->isHealthy()
+            ]);
+
+        } catch (\Exception $e) {
+            // Fallback to original behavior if AI service fails
+            $requests = RequestCase::where('status', 'pending')->with(['status', 'user'])->get();
+            
+            return response()->json([
+                'status' => 'success',
+                'data' => $requests,
+                'message' => 'AI ranking unavailable, showing unranked requests',
+                'ai_service_healthy' => false
+            ]);
+        }
     }
     // الادمن يقبل الطلب → يتحول إلى Case أساسي
     public function approveRequest($requestCaseId)

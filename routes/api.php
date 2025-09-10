@@ -30,101 +30,99 @@ use App\Http\Controllers\RequestChargeController;
 use App\Http\Controllers\WalletController;
 use App\Http\Middleware\ClientMiddleware;
 
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::middleware('auth:sanctum')->group(function () {});
+
+// Route::post('/generate-otp', [generateOtp::class, 'generateOtp']);
+//
+// Route::middleware('auth:sanctum')->post('/update-secret-info', [UpdateSecretInfo::class, 'update']);
+Route::post('/login-admin', [loginAdmin::class, 'login']);
 
 Route::patch('/donations/{id}/status', [DonationController::class, 'updateDonationStatus']); // للأدمن
+
+
+Route::middleware('auth:sanctum')->group(function () {
+  Route::get('/user', [UserProfileController::class, 'show']);
+  Route::put('/user', [UserProfileController::class, 'update']);
+});
+
+
+
+
 Route::post('/send-notification', [NotificationController::class, 'sendPushNotification']);
 
 //____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 
 
 /* للأدمن API  */
-Route::post('/login-admin', [loginAdmin::class, 'login']);
+//تعديل يوزر
+Route::put('/users/{id}', [UserController::class, 'update']);
 
-Route::prefix('admin')->middleware(['auth:sanctum', 'role:admin'])->group(function () {
+Route::delete('/users/{id}', [UserController::class, 'destroy']);
 
-  Route::get('/dashboard', function () {
-    return response()->json(['msg' => 'أنت أدمن']);
-  });
+//تعديل حالة الطلبات يدويً
+Route::put('/requests/{id}/status', [RequestCaseController::class, 'updateStatus']);
 
-  //تعديل يوزر
-  Route::put('/users/{id}', [UserController::class, 'update']);
+/*للاسئلة الشائعة */
+Route::post('/fqas', [FqaController::class, 'store']);
+Route::put('/fqas/{id}', [FqaController::class, 'update']);
+Route::delete('/fqas/{id}', [FqaController::class, 'destroy']);
 
-  Route::delete('/users/{id}', [UserController::class, 'destroy']);
+//يعرض ملخص كامل للإحصائيات بالموقع: عدد المستخدمين، عدد التبرعات، إجمالي الكميات المتبرع فيها، وعدد الطلبات المكتملة.
+Route::get('/reports/statistics', [ReportController::class, 'statistics']);
 
-  //تعديل حالة الطلبات يدويً
-  Route::put('/requests/{id}/status', [RequestCaseController::class, 'updateStatus']);
+//تعديل
+Route::put('/request-cases/{id}', [RequestCaseController::class, 'update']);
 
-  /*للاسئلة الشائعة */
-  Route::post('/fqas', [FqaController::class, 'store']);
-  Route::put('/fqas/{id}', [FqaController::class, 'update']);
-  Route::delete('/fqas/{id}', [FqaController::class, 'destroy']);
+Route::delete('/request-cases/{id}', [RequestCaseController::class, 'destroy']);
 
-  //يعرض ملخص كامل للإحصائيات بالموقع: عدد المستخدمين، عدد التبرعات، إجمالي الكميات المتبرع فيها، وعدد الطلبات المكتملة.
-  Route::get('/reports/statistics', [ReportController::class, 'statistics']);
+//2 الادمن يشوف كل الطلبات بانتظار المراجعة
+Route::post('/request-cases/pending', [RequestCaseController::class, 'pendingRequests']);
 
-  //تعديل
-  Route::put('/request-cases/{id}', [RequestCaseController::class, 'update']);
+//4الادمن يرفض الطلب 
+Route::post('/request-cases/{id}/reject', [RequestCaseController::class, 'rejectRequest']);
 
-  Route::delete('/request-cases/{id}', [RequestCaseController::class, 'destroy']);
+// الادمن يقبل الطلب → يتحول إلى Case أساسي
+Route::post('/request-cases/{id}/approve', [RequestCaseController::class, 'approveRequest']);
 
-  //2 الادمن يشوف كل الطلبات بانتظار المراجعة
-  Route::post('/request-cases/pending', [RequestCaseController::class, 'pendingRequests']);
 
-  //4الادمن يرفض الطلب 
-  Route::post('/request-cases/{id}/reject', [RequestCaseController::class, 'rejectRequest']);
 
-  // الادمن يقبل الطلب → يتحول إلى Case أساسي
-  Route::post('/request-cases/{id}/approve', [RequestCaseController::class, 'approveRequest']);
-
-  // معالجة طلبات الشحن
-  // الأدمن يوافق على طلب
-  Route::post('/request-charge/{id}/approve', [RequestChargeController::class, 'approve']);
-
-  // الأدمن يرفض طلب
-  Route::post('/request-charge/{id}/reject', [RequestChargeController::class, 'reject']);
-});
 
 //____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 
 
 //شغالين    flutter
-
 Route::post('/login-client', [loginClient::class, 'loginClient']);
-// Route::post('/login-client', [loginClient::class, 'loginClient'])->name('login');
 
-// Route::prefix('client')->middleware(['auth:sanctum', 'role:client'])->group(function () {
+Route::middleware('auth:sanctum')->post('/logout-client', [loginClient::class, 'logoutClient']);
 
+Route::post('/generate-otp', [generateOtpMobile::class, 'generateOtpMobile']);
 
-  // Route::get('/profile', function () {
-  //   return response()->json(['msg' => 'أنت مستخدم عادي']);
-  // });
+Route::post('/cwm', [continueWithMobile::class, 'continueWithMobile']);
 
-  Route::post('/generate-otp', [generateOtpMobile::class, 'generateOtpMobile']);
+/* first module secret-info*/
+// لجلب كل الـ SecretInfos
+Route::get('/secret-info', [SecretInfoController::class, 'index']);
 
-  Route::post('/cwm', [continueWithMobile::class, 'continueWithMobile']);
+// لجلب الـ SecretInfos لمستخدم معين
+Route::get('/users/{user_id}/secret-info', [SecretInfoController::class, 'getByUser']);
 
-  /* first module secret-info */
-  // لجلب كل الـ SecretInfos
-  Route::get('/secret-info', [SecretInfoController::class, 'index']);
+Route::post('/secret-info', [SecretInfoController::class, 'store']);
+//صفحة البروفايل
+Route::put('/secret-info/{id}', [SecretInfoController::class, 'update']);
 
-  // لجلب الـ SecretInfos لمستخدم معين
-  Route::get('/users/{user_id}/secret-info', [SecretInfoController::class, 'getByUser']);
+Route::patch('/secret-info/{id}', [SecretInfoController::class, 'getByUser']);
 
-  Route::post('/secret-info', [SecretInfoController::class, 'store']);
-  //صفحة البروفايل
-  Route::put('/secret-info/{id}', [SecretInfoController::class, 'update']);
+/*  request-cases*/
+//عرض كل طلبات الحالات (يشمل حالة الطلب، وصف، رقم الهاتف...)
+Route::get('/request-cases', [RequestCaseController::class, 'index']);
+//عرض طلب حالة معين
+Route::get('/request-cases/{id}', [RequestCaseController::class, 'show']);
+//إنشاء طلب حالة جديد
+Route::post('/request-cases', [RequestCaseController::class, 'store']);
 
-  Route::patch('/secret-infos/user/{user_id}', [SecretInfoController::class, 'getByUser']);
-
-  /*  request-cases*/
-  //عرض كل طلبات الحالات (يشمل حالة الطلب، وصف، رقم الهاتف...)
-  Route::get('/request-cases', [RequestCaseController::class, 'index']);
-  //عرض طلب حالة معين
-  Route::get('/request-cases/{id}', [RequestCaseController::class, 'show']);
-  //إنشاء طلب حالة جديد
-  Route::post('/request-cases', [RequestCaseController::class, 'store']);
-
-  /*
+/*
 PUT:
  لتحديث السجل بالكامل.
 PATCH:
@@ -132,54 +130,53 @@ PATCH:
  */
 
 
-  /*  cases   فلترة /cases?donation_type=1 
+/*  cases   فلترة /cases?donation_type=1 
 /cases?donation_type=2 //// /cases?donation_type=3
 + بحث  cases?search=----*/
-  //عرض كل الحالات مع تفاصيلها 
-  Route::get('/cases', [CaseController::class, 'index']);
+//عرض كل الحالات مع تفاصيلها 
+Route::get('/cases', [CaseController::class, 'index']);
 
-  //عرض حالة معينة بالتفصيل
-  Route::get('/cases/{id}', [CaseController::class, 'show']);
+//عرض حالة معينة بالتفصيل
+Route::get('/cases/{id}', [CaseController::class, 'show']);
 
-  //إنشاء حالة جديدة
-  // Route::post('/cases', [CaseController::class, 'store']);
+//إنشاء حالة جديدة
+// Route::post('/cases', [CaseController::class, 'store']);
 
-  //عرض نسبة التقدم
-  Route::get('progress/{id}', [RequestCaseController::class, 'progress']);
-
-
-
-  /*Donation*/
-  //إضافة تبرع جديد (Donation) في
-  Route::post('/donations', [DonationController::class, 'store']); // للمستخدمين'
-
-  //بتعرض كل التبرعات 
-  Route::get('/donations', [DonationController::class, 'index']);
-
-  // تفاصيل تبرع واحد
-  Route::get('/donations/{id}', [DonationController::class, 'show']);
-
-  // بتعرض تبرع خاص بحالة 
-  Route::get('/requests/{id}/donations', [DonationController::class, 'donationsByRequest']);
+//عرض نسبة التقدم
+Route::get('progress/{id}', [RequestCaseController::class, 'progress']);
 
 
-  /*فكرة ال rank*/
-  //قائمة ترتيب للمتبرعين حسب نقاطهم،
-  Route::get('/donors/ranking', [DonorRankingController::class, 'index']);
 
-  /*gallery */
-  // معرض الحالة
-  Route::get('/cases/{caseId}/gallery', [GalleryController::class, 'getCaseGallery']);
-  Route::post('/cases/{caseId}/gallery', [GalleryController::class, 'storeCaseGallery']);
+/*Donation*/
+//إضافة تبرع جديد (Donation) في
+Route::post('/donations', [DonationController::class, 'store']); // للمستخدمين'
 
-  // معرض طلب الحالة
-  Route::get('/requests/{requestId}/gallery', [GalleryController::class, 'getRequestGallery']);
-  Route::post('/requests/{requestId}/gallery', [GalleryController::class, 'storeRequestGallery']);
+//بتعرض كل التبرعات 
+Route::get('/donations', [DonationController::class, 'index']);
+
+// تفاصيل تبرع واحد
+Route::get('/donations/{id}', [DonationController::class, 'show']);
+
+// بتعرض تبرع خاص بحالة 
+Route::get('/requests/{id}/donations', [DonationController::class, 'donationsByRequest']);
 
 
-  // عرض كل الأسئلة الشائعة مع الإجابات
-  Route::get('/faqs', [FqaController::class, 'index']);
-// });
+/*فكرة ال rank*/
+//قائمة ترتيب للمتبرعين حسب نقاطهم،
+Route::get('/donors/ranking', [DonorRankingController::class, 'index']);
+
+/*gallery */
+// معرض الحالة
+Route::get('/cases/{caseId}/gallery', [GalleryController::class, 'getCaseGallery']);
+Route::post('/cases/{caseId}/gallery', [GalleryController::class, 'storeCaseGallery']);
+
+// معرض طلب الحالة
+Route::get('/requests/{requestId}/gallery', [GalleryController::class, 'getRequestGallery']);
+Route::post('/requests/{requestId}/gallery', [GalleryController::class, 'storeRequestGallery']);
+
+
+// عرض كل الأسئلة الشائعة مع الإجابات
+Route::get('/faqs', [FqaController::class, 'index']);
 
 
 // إرسال طلب شحن المحفظة
@@ -203,3 +200,12 @@ Route::get('/admin/wallet/{user_id}/balance', [WalletController::class, 'getUser
 Route::post('/request-charge', [RequestChargeController::class, 'store']);
 
 Route::get('/request-charges', [RequestChargeController::class, 'index']);
+
+// الأدمن يوافق على طلب
+
+Route::post('/request-charge/{id}/approve', [RequestChargeController::class, 'approve'])
+  ->middleware(AdminMiddleware::class);
+
+// الأدمن يرفض طلب
+Route::post('/request-charge/{id}/reject', [RequestChargeController::class, 'reject'])
+  ->middleware(AdminMiddleware::class);
