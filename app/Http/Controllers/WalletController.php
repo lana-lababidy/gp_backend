@@ -3,100 +3,61 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\RequestCharge;
-use App\Models\Wallet;
-use App\Models\RequestChargeState;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Models\Wallet;
+use App\Models\RequestCharge;
+use App\Models\RequestChargeState;
 
 class WalletController extends Controller
 {
-    // =================== دور المستخدم ===================
+    // سعر النقطة بالنسبة لليرة
+    private $pointsPerLira = 1 / 1000; // كل 1000 ليرة = 1 نقطة
 
-    // 1. إرسال طلب شحن المحفظة
+    // المستخدم يرسل طلب شحن
     public function requestTopup(Request $request)
     {
         $request->validate([
-            'quantity' => 'required|numeric|min:1',
             'amount' => 'required|numeric|min:1'
         ]);
 
-        $pendingState = RequestChargeState::where('name', 'Pending')->first();
-
         $charge = RequestCharge::create([
-            'quantity' => $request->quantity,
+            'user_id' => $request->user_id ?? 1,
             'amount' => $request->amount,
-            'user_id' => Auth::id(),
-            'status_id' =>  1,
+            'quantity' => 0, // أو أي قيمة مناسبة
+            'status_id' => RequestChargeState::where('name', 'Pending')->first()->id
         ]);
 
         return response()->json([
             'success' => true,
-            'message' => 'طلب شحن المحفظة تم بنجاح',
+            'message' => 'طلب الشحن تم، في انتظار الموافقة',
             'request_id' => $charge->id
         ]);
     }
 
-    // 2. عرض تاريخ طلبات الشحن
-    public function getTopupHistory(Request $request)
+    // عرض رصيد المستخدم
+    public function getBalance($user_id)
     {
-        $query = RequestCharge::where('user_id', Auth::id())->with('status');
+        $wallet = Wallet::where('user_id', $user_id)->first();
 
-        if ($request->has('status')) {
-            $status = RequestChargeState::where('name', ucfirst($request->status))->first();
-            if ($status) $query->where('status_id', $status->id);
-        }
-
-        $requests = $query->get()->map(function($item){
-            return [
-                'id' => $item->id,
-                'quantity' => $item->quantity,
-                'amount' => $item->amount,
-                'status' => $item->status->name,
-                'created_at' => $item->created_at,
-            ];
-        });
-
-        return response()->json($requests);
-    }
-
-    // 3. عرض رصيد المحفظة
-    public function getBalance()
-    {
-        $wallet = Wallet::where('user_id', Auth::id())->first();
         return response()->json([
             'total_points' => $wallet ? $wallet->total_points : 0
         ]);
     }
 
-    // =================== دور الإدمن ===================
 
-    // 4. عرض جميع طلبات الشحن (مع فلترة حسب الحالة)
-    public function getAllTopupRequests(Request $request)
+    // الأدمن يشوف الطلبات Pending
+    public function getPendingRequests()
     {
-        $query = RequestCharge::with('user', 'status');
+        $pending = RequestCharge::whereHas('status', function ($q) {
+            $q->where('name', 'Pending');
+        })->with('user')->get();
 
-        if ($request->has('status')) {
-            $status = RequestChargeState::where('name', ucfirst($request->status))->first();
-            if ($status) $query->where('status_id', $status->id);
-        }
-
-        $requests = $query->get()->map(function($item){
-            return [
-                'id' => $item->id,
-                'user_id' => $item->user->id,
-                'username' => $item->user->username ?? $item->user->aliasname,
-                'quantity' => $item->quantity,
-                'amount' => $item->amount,
-                'status' => $item->status->name,
-                'created_at' => $item->created_at,
-            ];
-        });
-
-        return response()->json($requests);
+        return response()->json($pending);
     }
 
-    // 5. الموافقة أو الرفض على طلب شحن
-    public function processTopupRequest(Request $request)
+    // الأدمن يوافق أو يرفض طلب الشحن
+    public function processRequest(Request $request)
     {
         $request->validate([
             'request_id' => 'required|exists:request_charges,id',
@@ -104,36 +65,30 @@ class WalletController extends Controller
         ]);
 
         $charge = RequestCharge::findOrFail($request->request_id);
+
         $approvedState = RequestChargeState::where('name', 'Approved')->first();
         $declinedState = RequestChargeState::where('name', 'Declined')->first();
 
         if ($request->action === 'approve') {
-            $charge->status_id = $approvedState->id;
-            $charge->save();
+            DB::transaction(function () use ($charge, $approvedState) {
+                $charge->update(['status_id' => $approvedState->id]);
 
-            $wallet = Wallet::firstOrCreate(
-                ['user_id' => $charge->user_id],
-                ['total_points' => 0]
-            );
-            $wallet->total_points += $charge->quantity;
-            $wallet->save();
+                $wallet = Wallet::firstOrCreate(
+                    ['user_id' => $charge->user_id],
+                    ['total_points' => 0]
+                );
 
-            return response()->json(['success' => true, 'message' => 'تمت الموافقة على طلب الشحن']);
+                // تحويل المبلغ إلى نقاط
+                $pointsPerLira = 1 / 1000;
+                $pointsToAdd = $charge->amount * $pointsPerLira;
+
+                $wallet->increment('total_points', $pointsToAdd);
+            });
+
+            return response()->json(['success' => true, 'message' => 'تمت الموافقة وتحديث المحفظة']);
         } else {
-            $charge->status_id = $declinedState->id;
-            $charge->save();
-
-            return response()->json(['success' => true, 'message' => 'تم رفض طلب الشحن']);
+            $charge->update(['status_id' => $declinedState->id]);
+            return response()->json(['success' => true, 'message' => 'تم رفض الطلب']);
         }
-    }
-
-    // 6. عرض رصيد أي مستخدم
-    public function getUserBalance($user_id)
-    {
-        $wallet = Wallet::where('user_id', $user_id)->first();
-        return response()->json([
-            'user_id' => $user_id,
-            'total_points' => $wallet ? $wallet->total_points : 0
-        ]);
     }
 }

@@ -11,10 +11,10 @@ class WalletSeeder extends Seeder
     {
         // نضيف محفظة لكل مستخدم موجود في الجدول، مع نقاط مبدئية (مثلاً 0)
         $wallets = [
-            ['user_id' => 1, 'total_points' => 100], // محمد
-            ['user_id' => 2, 'total_points' => 50],  // محمود
-            ['user_id' => 3, 'total_points' => 200], // لانا
-            ['user_id' => 4, 'total_points' => 75],  // عمر
+            ['user_id' => 1, 'total_points' => 1000000], // محمد
+            ['user_id' => 2, 'total_points' => 5500000],  // محمود
+            ['user_id' => 3, 'total_points' => 350000], // لانا
+            ['user_id' => 4, 'total_points' => 700000],  // عمر
         ];
 
         foreach ($wallets as $wallet) {

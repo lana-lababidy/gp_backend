@@ -43,6 +43,7 @@ class RequestCaseController extends Controller
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'description' => 'required|string',
+            'title' => 'required|string', // أضفنا هنا
             'status_id' => 'required|exists:request_case_statuses,id',
             'userName' => 'required|string', //عدلي لتصير المستعار
             'mobile_number' => 'required|numeric',
@@ -56,6 +57,7 @@ class RequestCaseController extends Controller
         try {
             $requestCase = RequestCase::create([
                 'user_id' => $validated['user_id'],
+                'title' => $validated['title'] , 
                 'description' => $validated['description'],
                 'status_id' => $validated['status_id'],
                 'userName' => $validated['userName'],

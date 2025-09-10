@@ -69,6 +69,28 @@ public function index(Request $request)
             'data' => $case
         ]);
     }
+     // إنشاء حالة جديدة
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'goal_amount' => 'nullable|numeric|min:0',
+            'points' => 'nullable|integer|min:0',
+            'user_id' => 'required|exists:users,id',
+            'states_id' => 'required|integer',
+            'donation_type_id' => 'nullable|integer'
+        ]);
+
+        $case = Case_c::create($validated);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Case created successfully',
+            'data' => $case
+        ], 201);
+    }
+
 
     // public function show($id)
     // {

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Wallet extends Model
 {
-    protected $table = 'wallet';
+    protected $table = 'wallets';
 
     use HasFactory;
 

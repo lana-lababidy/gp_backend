@@ -22,8 +22,8 @@ class RequestCharge extends Model
     }
 
     // علاقة Many to One مع حالة طلب الشحن (RequestChargeState)
-    public function state()
+    public function status()
     {
-        return $this->belongsTo(RequestCaseStatus::class, 'states_id');
+        return $this->belongsTo(RequestCaseStatus::class, 'status_id');
     }
 }

@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('request_charges', function (Blueprint $table) {
             $table->id();
             $table->integer('quantity');
-            $table->decimal('amount');
-
+            $table->decimal('amount', 15, 2);
             // $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
 
             $table->unsignedBigInteger('user_id');
