@@ -44,6 +44,33 @@ class CaseCsSeeder extends Seeder
                 'donation_type_id' => 3, // service
                 'user_id' => 4, // عمر
             ],
+            [
+                'title' => 'حملة التبرع بالدم',
+                'description' => 'حملة لجمع 200 وحدة دم لصالح مستشفى المدينة.',
+                'goal_amount' => 200000,
+                'points' => intval(200000 / 1000),
+                'states_id' => 1, // New / Pending
+                'donation_type_id' => 1, // money / blood
+                'user_id' => 3, 
+            ],
+            [
+                'title' => 'توزيع وجبات إفطار',
+                'description' => 'تأمين 500 وجبة إفطار خلال شهر رمضان للفقراء.',
+                'goal_amount' => 500000,
+                'points' => intval(500000 / 1000),
+                'states_id' => 2, // Accepted / In Progress
+                'donation_type_id' => 2, // in_kind (وجبات)
+                'user_id' => 1, 
+            ],
+            [
+                'title' => 'تأمين أدوية مزمنة',
+                'description' => 'تأمين أدوية لمرضى السكري والضغط في القرى البعيدة.',
+                'goal_amount' => 1000000,
+                'points' => intval(1000000 / 1000),
+                'states_id' => 4, // Pending Approval
+                'donation_type_id' => 2, // in_kind (أدوية)
+                'user_id' => 2, 
+            ],
         ];
 
         foreach ($cases as $case) {

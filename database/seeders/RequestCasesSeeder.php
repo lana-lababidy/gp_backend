@@ -49,6 +49,44 @@ class RequestCasesSeeder extends Seeder
                 'goal_quantity'     => 800,
                 'donation_type_id' => 3, // ✅ جهد شخصي
                 'fulfilled_quantity' => 120, // تم تنفيذ 60% من العمل
+            ], [
+                'title' => 'حملة التبرع بالدم',
+                'description' => 'حملة لجمع 200 وحدة دم لصالح مستشفى المدينة.',
+                'userName'          => 'سارة',
+                'mobile_number'     => '0987654321',
+                'importance'        => 5,
+                'status_id'         => 1, // New
+                'case_c_id'         => 4,
+                'user_id'           => 3,
+                'goal_quantity'     => 200,
+                'donation_type_id'  => 1, // تبرع مالي / دم
+                'fulfilled_quantity'=> 60,
+            ],
+            [
+                'title' => 'توزيع وجبات إفطار',
+                'description' => 'تأمين 500 وجبة إفطار خلال شهر رمضان للفقراء.',
+                'userName'          => 'نور',
+                'mobile_number'     => '0999888777',
+                'importance'        => 4,
+                'status_id'         => 2, // Accepted
+                'case_c_id'         => 5,
+                'user_id'           => 1,
+                'goal_quantity'     => 500,
+                'donation_type_id'  => 2, // تبرع عيني (وجبات)
+                'fulfilled_quantity'=> 150,
+            ],
+            [
+                'title' => 'تأمين أدوية مزمنة',
+                'description' => 'تأمين أدوية لمرضى السكري والضغط في القرى البعيدة.',
+                'userName'          => 'ليلى',
+                'mobile_number'     => '0955332211',
+                'importance'        => 5,
+                'status_id'         => 4, // Pending Approval
+                'case_c_id'         => 6,
+                'user_id'           => 2,
+                'goal_quantity'     => 1000,
+                'donation_type_id'  => 2, // أدوية = عيني
+                'fulfilled_quantity'=> 200,
             ],
         ];
 
