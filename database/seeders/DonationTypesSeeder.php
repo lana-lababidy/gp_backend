@@ -15,9 +15,9 @@ class DonationTypesSeeder extends Seeder
     {
         
         $types = [
-            ['name' => 'money', 'code' => 1],
-            ['name' => 'in_kind', 'code' => 2],
-            ['name' => 'service', 'code' => 3],
+            ['name' => 'تبرع مالي', 'code' => 1],
+            ['name' => 'تبرع عيني', 'code' => 2],
+            ['name' => 'جهد شخصي', 'code' => 3],
         ];
 
         foreach ($types as $type) {

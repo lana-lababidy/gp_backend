@@ -19,7 +19,7 @@ class RequestCase extends Model
         'points',
         'goal_quantity',
         'fulfilled_quantity',
-            'status'
+        'status'
 
     ];
 
