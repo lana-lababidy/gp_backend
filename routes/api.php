@@ -192,7 +192,8 @@ Route::get('/faqs', [FqaController::class, 'index']);
 // });
 
 
-// المستخدم
+// المستخدم يرسل طلب شحن
 Route::post('/wallet/topup', [WalletController::class, 'requestTopup']);
 
+    // عرض رصيد المستخدم
 Route::get('/wallet/balance/{user_id}', [WalletController::class, 'getBalance']);
