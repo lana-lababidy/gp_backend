@@ -19,6 +19,7 @@ class RequestCase extends Model
         'points',
         'goal_quantity',
         'fulfilled_quantity',
+        'donation_type_id',
         'status'
 
     ];
@@ -35,5 +36,9 @@ class RequestCase extends Model
     public function galleries()
     {
         return $this->hasMany(RequestGallery::class, 'request_case_id');
+    }
+    public function donationType()
+    {
+        return $this->belongsTo(DonationType::class);
     }
 }

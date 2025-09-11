@@ -13,17 +13,19 @@ class RequestCasesSeeder extends Seeder
             [
 
                 'title' => 'حملة دفء الشتاء',
-                'description' => 'تأمين بطانيات وملابس شتوية للأسر المحتاجة.',                'userName'          => 'محمد',
+                'description' => 'تأمين بطانيات وملابس شتوية للأسر المحتاجة.',
+                'userName'          => 'محمد',
                 'mobile_number'     => '0977123456',
                 'importance'        => 5,
                 'status_id'         => 5, // completed
                 'case_c_id'         => 1, // حملة دفء الشتاء
                 'user_id'           => 1, // محمد
+                'donation_type_id' => 2, // ✅ تبرع عيني مثلاً
                 'goal_quantity'     => 150,
-                'fulfilled_quantity'=> 30, // تم جمع 30 كرسي
+                'fulfilled_quantity' => 30, // تم جمع 30 كرسي
             ],
             [
-                      'title' => 'جمع 100 كرسي ',
+                'title' => 'جمع 100 كرسي ',
                 'description' => 'مدرسة بحاجة الى 100 كرسي قبل بداية العام الدراسي',
                 'userName'          => 'لانا',
                 'mobile_number'     => '0977123456',
@@ -32,7 +34,8 @@ class RequestCasesSeeder extends Seeder
                 'case_c_id'         => 2, // جمع كراسي
                 'user_id'           => 3, // لانا
                 'goal_quantity'     => 300,
-                'fulfilled_quantity'=> 50, // اكتمل الدعم
+                'donation_type_id' => 2, // ✅ تبرع عيني مثلاً
+                'fulfilled_quantity' => 50, // اكتمل الدعم
             ],
             [
                 'title' => 'ترميم مدرسة السلام',
@@ -44,7 +47,8 @@ class RequestCasesSeeder extends Seeder
                 'case_c_id'         => 3, // ترميم مدرسة السلام
                 'user_id'           => 4, // عمر
                 'goal_quantity'     => 800,
-                'fulfilled_quantity'=> 120, // تم تنفيذ 60% من العمل
+                'donation_type_id' => 3, // ✅ جهد شخصي
+                'fulfilled_quantity' => 120, // تم تنفيذ 60% من العمل
             ],
         ];
 

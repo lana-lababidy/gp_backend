@@ -46,27 +46,30 @@ class RequestCaseController extends Controller
             'title' => 'required|string', // أضفنا هنا
             'status_id' => 'required|exists:request_case_statuses,id',
             'userName' => 'required|string', //عدلي لتصير المستعار
+            'donation_type_id' => 'required|exists:donation_types,id',
             'mobile_number' => 'required|numeric',
             'importance' => 'required|integer|min:1',
             'case_c_id' => 'required|exists:case_cs,id',
             'goal_quantity' => 'nullable|integer|min:0',
             'fulfilled_quantity' => 'nullable|integer|min:0',
-            'status' => 'nullable|string',
+            // 'status' => 'nullable|string',
         ]);
 
         try {
             $requestCase = RequestCase::create([
                 'user_id' => $validated['user_id'],
-                'title' => $validated['title'] , 
+                'title' => $validated['title'],
                 'description' => $validated['description'],
                 'status_id' => $validated['status_id'],
                 'userName' => $validated['userName'],
                 'mobile_number' => $validated['mobile_number'],
+                'donation_type_id' => $validated['donation_type_id'],
                 'importance' => $validated['importance'],
                 'case_c_id' => $validated['case_c_id'],
                 'goal_quantity' => $validated['goal_quantity'] ?? 0,
                 'fulfilled_quantity' => $validated['fulfilled_quantity'] ?? 0,
-                'status' => $validated['status'] ?? 'pending',
+                'status' => 'pending', 
+                // 'status' => $validated['status'] ?? 'pending',
             ]);
 
             return response()->json([

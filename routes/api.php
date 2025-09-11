@@ -54,6 +54,8 @@ Route::get('/users/{user_id}/secret-info', [SecretInfoController::class, 'getByU
 //تعديل يوزر
 Route::put('/users/{id}', [UserController::class, 'update']);
 
+Route::get('/allUsers', [UserController::class, 'getAllUsers']);
+
 Route::delete('/users/{id}', [UserController::class, 'destroy']);
 
 //تعديل حالة الطلبات يدويً
