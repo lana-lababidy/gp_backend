@@ -134,6 +134,7 @@ Route::get('/request-cases/{id}', [RequestCaseController::class, 'show']);
 //إنشاء طلب حالة جديد
 Route::post('/request-cases', [RequestCaseController::class, 'store']);
 
+
 /*
 PUT:
  لتحديث السجل بالكامل.
