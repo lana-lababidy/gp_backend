@@ -8,7 +8,7 @@ text
 [![MySQL](https://img.shields.io/badge/MySQL-8.0+-006699?style=flat&logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat)](LICENSE)
 
-منصة دعم - **Backend API فقط**
+**منصة دعم - Backend API فقط**
 
 </div>
 
@@ -17,7 +17,7 @@ text
 منصة **Abshir.Aspu** تربط الجهات المعنية والداعمين من خلال نظام API شفاف وآمن. 
 
 **الميزات الأساسية:**
-- توثيق الاحتياجات  (مالية، عينية، تطوعية)
+- توثيق الاحتياجات (مالية، عينية، تطوعية)
 - تتبع تقدم التبرعات في الوقت الفعلي
 - نظام نقاط وشارات لتحفيز المشاركة
 - تبرعات مجهولة مع الحفاظ على الخصوصية
@@ -53,7 +53,7 @@ text
 التثبيت
 bash
 # 1. استنسخ المشروع
-git clone <https://github.com/lana-lababidy/gp_backend>
+git clone https://github.com/lana-lababidy/gp_backend
 cd Abshir.Aspu
 
 # 2. ثبت التبعيات
@@ -61,10 +61,11 @@ composer install --optimize-autoloader --no-dev
 
 # 3. إعداد البيئة
 cp .env.example .env
-مع تعديل
- DB_DATABASE=Gradpro
- DB_USERNAME=myuser
- DB_PASSWORD=myuser000
+
+# ⚠️ عدّل الإعدادات التالية في .env:
+# DB_DATABASE=Gradpro
+# DB_USERNAME=myuser
+# DB_PASSWORD=myuser000
 
 php artisan key:generate
 
@@ -114,7 +115,9 @@ bash
 php artisan test
 
 # اختبار API مع Postman
-# Collection متوفرة في: /docs/postman-collection.json
+# Collection متوفرة في: docs/Abshir.postman_collection.json
+📥 تحميل Postman Collection
+
 📁 هيكل المشروع
 text
 Abshir.Aspu/
@@ -144,12 +147,20 @@ text
 [Beneficiaries] → [Progress Tracking]
      ↓
 [Points System] → [Ranks]
+🤝 المساهمة
+Fork المشروع
+
+إنشاء branch feature/اسم-الميزة
+
+Commit التغييرات
+
+Push للـ branch
+
 افتح Pull Request
 
 📞 التواصل
-+963968879073
-المطور: [لانا لبابيبدي]
-
+المطور: لانا لبابيبدي
 البريد: lanalaba8@gmail.com
-
+هاتف: +963968879073
 GitHub: @lana-lababidy
+
