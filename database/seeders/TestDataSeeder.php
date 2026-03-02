@@ -15,7 +15,7 @@ use App\Models\DonationType;
 class TestDataSeeder extends Seeder
 {
     public function run(): void
-    {
+    {/*
         // Clear existing data (use with caution in production)
         if (config('app.env') !== 'production') {
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
@@ -171,6 +171,6 @@ class TestDataSeeder extends Seeder
 
         $this->command->info('Test data seeded successfully!');
         $this->command->info('Created ' . count($testCases) . ' test request cases');
-        $this->command->info('Cases range from importance 2-5 with various completion percentages');
+        $this->command->info('Cases range from importance 2-5 with various completion percentages');*/
     }
 }
