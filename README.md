@@ -1,61 +1,155 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+text
+<div align="center">
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# 🏫 Abshir.Aspu - Backend API
 
-## About Laravel
+[![PHP](https://img.shields.io/badge/PHP-8.1+-blueviolet?style=flat&logo=php&logoColor=white)](https://www.php.net/)
+[![Laravel](https://img.shields.io/badge/Laravel-10.x-red?style=flat&logo=laravel&logoColor=white)](https://laravel.com/)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0+-006699?style=flat&logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat)](LICENSE)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+منصة دعم - **Backend API فقط**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+</div>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 📋 نظرة عامة
 
-## Learning Laravel
+منصة **Abshir.Aspu** تربط الجهات المعنية والداعمين من خلال نظام API شفاف وآمن. 
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+**الميزات الأساسية:**
+- توثيق الاحتياجات  (مالية، عينية، تطوعية)
+- تتبع تقدم التبرعات في الوقت الفعلي
+- نظام نقاط وشارات لتحفيز المشاركة
+- تبرعات مجهولة مع الحفاظ على الخصوصية
+- إدارة شاملة للأدوار (Admin, Donor, Beneficiary)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🛠️ التقنيات المستخدمة
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+| الطبقة | التقنية | الإصدار |
+|--------|----------|----------|
+| Framework | Laravel | 10.x |
+| Authentication | Laravel Sanctum (JWT) | ^4.0 |
+| Database | MySQL | 8.0+ |
+| Hashing | bcrypt | مدمج |
+| API Testing | Postman | - |
 
-## Laravel Sponsors
+**الهيكلية:**
+MVC Architecture
+├── Models (Eloquent ORM)
+├── Controllers (API Resource Controllers)
+├── Routes (api.php)
+├── Migrations & Seeders
+└── Middleware (Authorization)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+text
 
-### Premium Partners
+## 🚀 البدء السريع
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### المتطلبات
+```bash
+- PHP >= 8.1
+- Composer
+- MySQL 8.0+
+التثبيت
+bash
+# 1. استنسخ المشروع
+git clone <https://github.com/lana-lababidy/gp_backend>
+cd Abshir.Aspu
 
-## Contributing
+# 2. ثبت التبعيات
+composer install --optimize-autoloader --no-dev
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# 3. إعداد البيئة
+cp .env.example .env
+مع تعديل
+ DB_DATABASE=Gradpro
+ DB_USERNAME=myuser
+ DB_PASSWORD=myuser000
 
-## Code of Conduct
+php artisan key:generate
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# 4. إعداد قاعدة البيانات
+php artisan migrate --seed
 
-## Security Vulnerabilities
+# 5. تشغيل الخادم
+php artisan serve
+API Base URL: http://localhost:8000/api
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+📖 استخدام الـ API
+المصادقة (Authentication)
+bash
+POST /api/register
+POST /api/login
+Authorization: Bearer {token}
+الـ Endpoints الرئيسية
+الطريقة	Endpoint	الوصف	الأدوار
+POST	/requests	إنشاء طلب تبرع	Beneficiary
+GET	/requests/{id}	عرض طلب	All
+POST	/donations	إجراء تبرع	Donor
+GET	/requests/{id}/progress	تتبع التقدم	All
+GET	/profile	بيانات المستخدم	Authenticated
+PUT	/requests/{id}/status	تحديث حالة	Admin
+حالات الطلبات:
 
-## License
+text
+PENDING → INPROGRESS → DONE/SUCCESS/DECLINED
+نظام الرتب:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+text
+Bronze (1000 pts) → Silver → Gold → Diamond
+مثال طلب API
+bash
+curl -X POST http://localhost:8000/api/requests \
+  -H "Authorization: Bearer {token}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "احتياجات كتب دراسية",
+    "description": "كتب للصفوف 1-6",
+    "type": "in_kind",
+    "target_amount": 5000
+  }'
+🧪 الاختبار
+bash
+# تشغيل الاختبارات
+php artisan test
+
+# اختبار API مع Postman
+# Collection متوفرة في: /docs/postman-collection.json
+📁 هيكل المشروع
+text
+Abshir.Aspu/
+├── app/
+│   ├── Http/Controllers/Api/
+│   ├── Models/
+│   └── Services/
+├── database/
+│   ├── migrations/
+│   └── seeders/
+├── routes/api.php
+├── config/
+└── tests/
+🔐 الأمان والحماية
+JWT Authentication مع Laravel Sanctum
+
+bcrypt Hashing لكلمات المرور
+
+Role-based Authorization
+
+CSRF Protection (Sanctum)
+
+📊 قاعدة البيانات (ERD)
+text
+[Admin] ←→ [Requests] ←→ [Donations] → [Donors]
+     ↓
+[Beneficiaries] → [Progress Tracking]
+     ↓
+[Points System] → [Ranks]
+افتح Pull Request
+
+📞 التواصل
++963968879073
+المطور: [لانا لبابيبدي]
+
+البريد: lanalaba8@gmail.com
+
+GitHub: @lana-lababidy
