@@ -1,4 +1,3 @@
-text
 <div align="center">
 
 # 🏫 Abshir.Aspu - Backend API
@@ -14,7 +13,7 @@ text
 
 ## 📋 نظرة عامة
 
-منصة **Abshir.Aspu** تربط الجهات المعنية والداعمين من خلال نظام API شفاف وآمن. 
+منصة **Abshir.Aspu** تربط الجهات المعنية والداعمين من خلال نظام API شفاف وآمن.
 
 **الميزات الأساسية:**
 - توثيق الاحتياجات (مالية، عينية، تطوعية)
@@ -41,8 +40,6 @@ MVC Architecture
 ├── Migrations & Seeders
 └── Middleware (Authorization)
 
-text
-
 ## 🚀 البدء السريع
 
 ### المتطلبات
@@ -51,7 +48,6 @@ text
 - Composer
 - MySQL 8.0+
 التثبيت
-bash
 # 1. استنسخ المشروع
 git clone https://github.com/lana-lababidy/gp_backend
 cd Abshir.Aspu
@@ -62,7 +58,7 @@ composer install --optimize-autoloader --no-dev
 # 3. إعداد البيئة
 cp .env.example .env
 
-# ⚠️ عدّل الإعدادات التالية في .env:
+# ⚠️ عدّل في ملف .env:
 # DB_DATABASE=Gradpro
 # DB_USERNAME=myuser
 # DB_PASSWORD=myuser000
@@ -78,7 +74,6 @@ API Base URL: http://localhost:8000/api
 
 📖 استخدام الـ API
 المصادقة (Authentication)
-bash
 POST /api/register
 POST /api/login
 Authorization: Bearer {token}
@@ -91,15 +86,12 @@ GET	/requests/{id}/progress	تتبع التقدم	All
 GET	/profile	بيانات المستخدم	Authenticated
 PUT	/requests/{id}/status	تحديث حالة	Admin
 حالات الطلبات:
-
-text
 PENDING → INPROGRESS → DONE/SUCCESS/DECLINED
-نظام الرتب:
 
-text
+نظام الرتب:
 Bronze (1000 pts) → Silver → Gold → Diamond
 مثال طلب API
-bash
+
 curl -X POST http://localhost:8000/api/requests \
   -H "Authorization: Bearer {token}" \
   -H "Content-Type: application/json" \
@@ -110,16 +102,14 @@ curl -X POST http://localhost:8000/api/requests \
     "target_amount": 5000
   }'
 🧪 الاختبار
-bash
+
 # تشغيل الاختبارات
 php artisan test
+📥 Postman Collection
 
-# اختبار API مع Postman
-# Collection متوفرة في: docs/Abshir.postman_collection.json
-📥 تحميل Postman Collection
+Run in Postman
 
 📁 هيكل المشروع
-text
 Abshir.Aspu/
 ├── app/
 │   ├── Http/Controllers/Api/
@@ -141,7 +131,7 @@ Role-based Authorization
 CSRF Protection (Sanctum)
 
 📊 قاعدة البيانات (ERD)
-text
+
 [Admin] ←→ [Requests] ←→ [Donations] → [Donors]
      ↓
 [Beneficiaries] → [Progress Tracking]
@@ -163,4 +153,5 @@ Push للـ branch
 البريد: lanalaba8@gmail.com
 هاتف: +963968879073
 GitHub: @lana-lababidy
+
 
