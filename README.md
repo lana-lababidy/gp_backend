@@ -137,16 +137,6 @@ CSRF Protection (Sanctum)
 [Beneficiaries] → [Progress Tracking]
      ↓
 [Points System] → [Ranks]
-🤝 المساهمة
-Fork المشروع
-
-إنشاء branch feature/اسم-الميزة
-
-Commit التغييرات
-
-Push للـ branch
-
-افتح Pull Request
 
 📞 التواصل
 المطور: لانا لبابيبدي
